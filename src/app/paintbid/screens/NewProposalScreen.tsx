@@ -1,22 +1,69 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { usePaintBidStore } from "@/lib/paintbid/store";
 import { generateProposalFromBidForm } from "@/lib/paintbid/proposal/fromBidForm";
-import { formatCurrency } from "@/lib/paintbid/bidform/pricing";
+import { formatCurrency, computeBidFormTotals } from "@/lib/paintbid/bidform/pricing";
 import { Button } from "@/components/ui/Button";
+import { checkQAGate } from "@/lib/paintbid/qaGating";
+
+type ViewMode = "edit" | "preview";
 
 export function NewProposalScreen() {
   const bidForm = usePaintBidStore((state) => state.bidForm);
+  const importReport = usePaintBidStore((state) => state.importReport);
+  const qa = usePaintBidStore((state) => state.qa);
+  const activeFinalId = usePaintBidStore((state) => state.activeFinalId);
+  const proposalFinals = usePaintBidStore((state) => state.proposalFinals);
   const updateBidFormProject = usePaintBidStore((state) => state.updateBidFormProject);
   const updateBidFormExclusions = usePaintBidStore((state) => state.updateBidFormExclusions);
+  const createProposalSnapshot = usePaintBidStore((state) => state.createProposalSnapshot);
+  const setActiveFinal = usePaintBidStore((state) => state.setActiveFinal);
 
-  const proposal = useMemo(() => {
+  const [mode, setMode] = useState<ViewMode>("edit");
+
+  const qaGate = checkQAGate(importReport, qa);
+
+  // Generate live proposal from current bidForm
+  const liveProposal = useMemo(() => {
     if (!bidForm) return null;
     return generateProposalFromBidForm(bidForm);
   }, [bidForm]);
 
-  if (!bidForm || !proposal) {
+  // Get active finalized snapshot
+  const activeFinal = proposalFinals.find((f) => f.id === activeFinalId);
+
+  // Determine which proposal to show
+  const displayProposal = mode === "preview" && activeFinal ? activeFinal.proposal : liveProposal;
+  const isFinalized = mode === "preview" && activeFinal !== undefined;
+
+  const handleFinalize = () => {
+    if (!bidForm || !liveProposal) return;
+
+    const totals = computeBidFormTotals(bidForm, true);
+    const versionNumber = proposalFinals.length + 1;
+
+    createProposalSnapshot(
+      `Final v${versionNumber}`,
+      liveProposal,
+      {
+        subtotal: totals.baseSubtotal,
+        overhead: totals.overhead,
+        profit: totals.profit,
+        contingency: totals.contingency,
+        total: totals.total,
+      }
+    );
+
+    setMode("preview");
+  };
+
+  const handleEditNewVersion = () => {
+    setActiveFinal(undefined);
+    setMode("edit");
+  };
+
+  if (!bidForm || !liveProposal) {
     return (
       <div className="text-center py-20">
         <div className="bg-gray-100 rounded-full w-32 h-32 flex items-center justify-center mx-auto mb-6">
@@ -37,23 +84,170 @@ export function NewProposalScreen() {
     );
   }
 
+  const proposal = displayProposal as ReturnType<typeof generateProposalFromBidForm>;
+
   return (
     <div className="space-y-6">
-      {/* Action Bar - Hidden on Print */}
-      <div className="bg-white border-2 border-brand-line rounded-lg p-4 shadow-sm flex items-center justify-between print:hidden">
-        <div>
-          <h3 className="text-lg font-bold text-brand-navy">Proposal Preview</h3>
-          <p className="text-sm text-gray-600">Review and print your professional proposal</p>
+      {/* QA Gate Warning */}
+      {!qaGate.canProceed && (
+        <div className="bg-red-50 border-2 border-red-300 rounded-lg p-6 print:hidden">
+          <div className="flex items-start gap-3">
+            <div className="text-4xl">⛔</div>
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-red-900 mb-2">QA Review Required</h3>
+              <p className="text-red-800 mb-3">
+                {qaGate.reason}
+              </p>
+              <p className="text-sm text-red-700 mb-4">
+                You must acknowledge the QA review before proceeding to finalize and print proposals.
+                Go to the <strong>QA / Reconcile</strong> tab to review unmapped items.
+              </p>
+            </div>
+          </div>
         </div>
-        <Button
-          onClick={() => window.print()}
-          className="text-base px-6 py-3"
-        >
-          🖨️ Print / Save as PDF
-        </Button>
+      )}
+
+      {/* QA Warning (gate passed but unresolved items) */}
+      {qaGate.canProceed && qaGate.unresolvedCount > 0 && (
+        <div className="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-4 print:hidden">
+          <div className="flex items-start gap-3">
+            <div className="text-2xl">⚠️</div>
+            <div>
+              <p className="text-sm font-semibold text-yellow-900">
+                QA acknowledged with {qaGate.unresolvedCount} unresolved item(s).
+                Review the QA tab if you want to resolve them before finalizing.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mode Toggle & Action Bar */}
+      <div className="bg-white border-2 border-brand-line rounded-lg p-4 shadow-sm print:hidden">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div>
+              <h3 className="text-lg font-bold text-brand-navy">
+                {isFinalized ? "📋 Finalized Proposal" : "✏️ Draft Proposal"}
+              </h3>
+              <p className="text-sm text-gray-600">
+                {isFinalized
+                  ? `Viewing: ${activeFinal?.name} (created ${new Date(activeFinal?.createdAt || 0).toLocaleString()})`
+                  : "Editing live proposal - changes apply in real-time"}
+              </p>
+            </div>
+            {proposalFinals.length > 0 && (
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setMode("edit")}
+                  className={`px-3 py-1.5 rounded font-semibold text-sm transition-colors ${
+                    mode === "edit"
+                      ? "bg-brand-navy text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                >
+                  Edit Mode
+                </button>
+                <button
+                  onClick={() => setMode("preview")}
+                  disabled={!activeFinal}
+                  className={`px-3 py-1.5 rounded font-semibold text-sm transition-colors ${
+                    mode === "preview"
+                      ? "bg-brand-navy text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  }`}
+                >
+                  Preview Mode
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-3">
+            {isFinalized ? (
+              <>
+                <Button
+                  onClick={() => window.print()}
+                  className="text-base px-6 py-3"
+                >
+                  🖨️ Print Finalized
+                </Button>
+                <Button
+                  onClick={handleEditNewVersion}
+                  variant="secondary"
+                  className="text-base px-6 py-3"
+                >
+                  ✏️ Edit New Version
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  onClick={() => window.print()}
+                  variant="secondary"
+                  className="text-base px-6 py-3"
+                  disabled={!qaGate.canProceed}
+                >
+                  🖨️ Print Draft
+                </Button>
+                <Button
+                  onClick={handleFinalize}
+                  className="text-base px-6 py-3"
+                  disabled={!qaGate.canProceed}
+                >
+                  ✅ Finalize for Print
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
       </div>
 
+      {/* Finalized Proposals Dropdown (if multiple) */}
+      {proposalFinals.length > 1 && mode === "preview" && (
+        <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-4 print:hidden">
+          <label className="text-sm font-semibold text-blue-900 block mb-2">
+            Select Finalized Version to View:
+          </label>
+          <select
+            value={activeFinalId || ""}
+            onChange={(e) => setActiveFinal(e.target.value || undefined)}
+            className="w-full px-4 py-2 rounded-lg border-2 border-blue-300 bg-white font-semibold"
+          >
+            {proposalFinals.map((final) => (
+              <option key={final.id} value={final.id}>
+                {final.name} - {formatCurrency(final.bidTotals.total)} (
+                {new Date(final.createdAt).toLocaleDateString()})
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
       {/* Proposal Preview */}
+      <ProposalDocument
+        proposal={proposal}
+        isFinalized={isFinalized}
+        updateBidFormProject={updateBidFormProject}
+        updateBidFormExclusions={updateBidFormExclusions}
+      />
+    </div>
+  );
+}
+
+function ProposalDocument({
+  proposal,
+  isFinalized,
+  updateBidFormProject,
+  updateBidFormExclusions,
+}: {
+  proposal: ReturnType<typeof generateProposalFromBidForm>;
+  isFinalized: boolean;
+  updateBidFormProject: (updates: Record<string, string>) => void;
+  updateBidFormExclusions: (exclusions: string[]) => void;
+}) {
+  return (
+    <>
       <div className="bg-white border-2 border-brand-line rounded-lg shadow-lg overflow-hidden print:shadow-none print:border-0">
         {/* Header */}
         <div className="bg-gradient-to-r from-brand-navy to-brand-navy2 px-8 py-8 border-b-4 border-brand-gold print:bg-brand-navy">
@@ -82,65 +276,67 @@ export function NewProposalScreen() {
           </div>
         </div>
 
-        {/* Project Info (Editable) */}
-        <div className="px-8 py-6 border-b-2 border-brand-line bg-gray-50 print:hidden">
-          <h3 className="text-lg font-bold text-brand-navy mb-4">
-            Project Information
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">Project Name</label>
-              <input
-                type="text"
-                value={proposal.project.projectName || ""}
-                onChange={(e) =>
-                  updateBidFormProject({ projectName: e.target.value })
-                }
-                className="w-full px-4 py-3 rounded-lg border-2 border-brand-line bg-white text-gray-800 text-base font-semibold focus:ring-2 focus:ring-brand-gold focus:border-brand-gold"
-                placeholder="Enter project name"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">Location</label>
-              <input
-                type="text"
-                value={proposal.project.address || ""}
-                onChange={(e) =>
-                  updateBidFormProject({ address: e.target.value })
-                }
-                className="w-full px-4 py-3 rounded-lg border-2 border-brand-line bg-white text-gray-800 text-base font-semibold focus:ring-2 focus:ring-brand-gold focus:border-brand-gold"
-                placeholder="Enter location"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">Developer/Client</label>
-              <input
-                type="text"
-                value={proposal.project.developer || ""}
-                onChange={(e) =>
-                  updateBidFormProject({ developer: e.target.value })
-                }
-                className="w-full px-4 py-3 rounded-lg border-2 border-brand-line bg-white text-gray-800 text-base font-semibold focus:ring-2 focus:ring-brand-gold focus:border-brand-gold"
-                placeholder="Enter developer/client"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">Contact</label>
-              <input
-                type="text"
-                value={proposal.project.contact || ""}
-                onChange={(e) =>
-                  updateBidFormProject({ contact: e.target.value })
-                }
-                className="w-full px-4 py-3 rounded-lg border-2 border-brand-line bg-white text-gray-800 text-base font-semibold focus:ring-2 focus:ring-brand-gold focus:border-brand-gold"
-                placeholder="Enter contact"
-              />
+        {/* Project Info (Editable in Edit Mode) */}
+        {!isFinalized && (
+          <div className="px-8 py-6 border-b-2 border-brand-line bg-gray-50 print:hidden">
+            <h3 className="text-lg font-bold text-brand-navy mb-4">
+              Project Information
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700">Project Name</label>
+                <input
+                  type="text"
+                  value={proposal.project.projectName || ""}
+                  onChange={(e) =>
+                    updateBidFormProject({ projectName: e.target.value })
+                  }
+                  className="w-full px-4 py-3 rounded-lg border-2 border-brand-line bg-white text-gray-800 text-base font-semibold focus:ring-2 focus:ring-brand-gold focus:border-brand-gold"
+                  placeholder="Enter project name"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700">Location</label>
+                <input
+                  type="text"
+                  value={proposal.project.address || ""}
+                  onChange={(e) =>
+                    updateBidFormProject({ address: e.target.value })
+                  }
+                  className="w-full px-4 py-3 rounded-lg border-2 border-brand-line bg-white text-gray-800 text-base font-semibold focus:ring-2 focus:ring-brand-gold focus:border-brand-gold"
+                  placeholder="Enter location"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700">Developer/Client</label>
+                <input
+                  type="text"
+                  value={proposal.project.developer || ""}
+                  onChange={(e) =>
+                    updateBidFormProject({ developer: e.target.value })
+                  }
+                  className="w-full px-4 py-3 rounded-lg border-2 border-brand-line bg-white text-gray-800 text-base font-semibold focus:ring-2 focus:ring-brand-gold focus:border-brand-gold"
+                  placeholder="Enter developer/client"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700">Contact</label>
+                <input
+                  type="text"
+                  value={proposal.project.contact || ""}
+                  onChange={(e) =>
+                    updateBidFormProject({ contact: e.target.value })
+                  }
+                  className="w-full px-4 py-3 rounded-lg border-2 border-brand-line bg-white text-gray-800 text-base font-semibold focus:ring-2 focus:ring-brand-gold focus:border-brand-gold"
+                  placeholder="Enter contact"
+                />
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Project Info (Print Only) */}
-        <div className="hidden print:block px-8 py-6 border-b-2 border-gray-300">
+        {/* Project Info (Print Only / Finalized View) */}
+        <div className={isFinalized ? "px-8 py-6 border-b-2 border-gray-300" : "hidden print:block px-8 py-6 border-b-2 border-gray-300"}>
           <h3 className="text-lg font-bold text-gray-900 mb-4">
             Project Information
           </h3>
@@ -312,28 +508,30 @@ export function NewProposalScreen() {
         </div>
       </div>
 
-      {/* Edit Exclusions Section */}
-      <div className="bg-white border-2 border-brand-line rounded-lg p-6 shadow-sm print:hidden">
-        <h3 className="text-xl font-bold text-brand-navy mb-4">
-          Edit Exclusions
-        </h3>
-        <p className="text-sm text-gray-600 mb-3">
-          Modify the list of excluded items. One exclusion per line.
-        </p>
-        <textarea
-          value={proposal.exclusions.join("\n")}
-          onChange={(e) =>
-            updateBidFormExclusions(
-              e.target.value.split("\n").filter((line) => line.trim())
-            )
-          }
-          className="w-full h-48 px-4 py-3 rounded-lg border-2 border-brand-line bg-white text-gray-800 text-base font-mono focus:ring-2 focus:ring-brand-gold focus:border-brand-gold"
-          placeholder="Enter exclusions (one per line)"
-        />
-        <p className="text-sm text-gray-600 mt-3 font-semibold">
-          💡 Changes apply immediately to the proposal above
-        </p>
-      </div>
-    </div>
+      {/* Edit Exclusions Section (Edit Mode Only) */}
+      {!isFinalized && (
+        <div className="bg-white border-2 border-brand-line rounded-lg p-6 shadow-sm print:hidden">
+          <h3 className="text-xl font-bold text-brand-navy mb-4">
+            Edit Exclusions
+          </h3>
+          <p className="text-sm text-gray-600 mb-3">
+            Modify the list of excluded items. One exclusion per line.
+          </p>
+          <textarea
+            value={proposal.exclusions.join("\n")}
+            onChange={(e) =>
+              updateBidFormExclusions(
+                e.target.value.split("\n").filter((line) => line.trim())
+              )
+            }
+            className="w-full h-48 px-4 py-3 rounded-lg border-2 border-brand-line bg-white text-gray-800 text-base font-mono focus:ring-2 focus:ring-brand-gold focus:border-brand-gold"
+            placeholder="Enter exclusions (one per line)"
+          />
+          <p className="text-sm text-gray-600 mt-3 font-semibold">
+            💡 Changes apply immediately to the proposal above
+          </p>
+        </div>
+      )}
+    </>
   );
 }

@@ -43,6 +43,10 @@ export function ExportScreen() {
       estimateSettings: store.estimateSettings,
       proposalSettings: store.proposalSettings,
       lastSavedAt: Date.now(),
+      importReport: store.importReport,
+      qa: store.qa,
+      proposalFinals: store.proposalFinals,
+      activeFinalId: store.activeFinalId,
     });
 
     const blob = new Blob([json], { type: "application/json" });

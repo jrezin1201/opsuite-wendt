@@ -33,6 +33,12 @@ export function getDefaultState(): AppState {
       termsText: 'Payment terms: 50% deposit, 50% upon completion.',
     },
     lastSavedAt: Date.now(),
+    importReport: undefined,
+    qa: {
+      resolved: {},
+    },
+    proposalFinals: [],
+    activeFinalId: undefined,
   };
 }
 
@@ -61,6 +67,7 @@ export function loadState(): AppState | null {
     if (!Array.isArray(parsed.pricebook)) parsed.pricebook = [];
     if (!Array.isArray(parsed.takeoffRows)) parsed.takeoffRows = [];
     if (!Array.isArray(parsed.lineItems)) parsed.lineItems = [];
+    if (!Array.isArray(parsed.proposalFinals)) parsed.proposalFinals = [];
     if (!parsed.mappings || typeof parsed.mappings !== 'object') {
       parsed.mappings = {};
     }
@@ -69,6 +76,9 @@ export function loadState(): AppState | null {
     }
     if (!parsed.proposalSettings || typeof parsed.proposalSettings !== 'object') {
       parsed.proposalSettings = getDefaultState().proposalSettings;
+    }
+    if (!parsed.qa || typeof parsed.qa !== 'object') {
+      parsed.qa = { resolved: {} };
     }
 
     return parsed as AppState;
@@ -150,6 +160,10 @@ export function importState(json: string): AppState {
       estimateSettings: parsed.estimateSettings || defaultState.estimateSettings,
       proposalSettings: parsed.proposalSettings || defaultState.proposalSettings,
       lastSavedAt: Date.now(),
+      importReport: parsed.importReport,
+      qa: parsed.qa || { resolved: {} },
+      proposalFinals: parsed.proposalFinals || [],
+      activeFinalId: parsed.activeFinalId,
     };
   } catch (error) {
     throw new Error(`Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`);

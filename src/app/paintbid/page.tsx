@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Sidebar } from "@/components/paintbid/Sidebar";
 import { usePaintBidStore } from "@/lib/paintbid/store";
 import { NewImportScreen } from "./screens/NewImportScreen";
+import { QAScreen } from "./screens/QAScreen";
 import { NewBidFormScreen } from "./screens/NewBidFormScreen";
 import { NewProposalScreen } from "./screens/NewProposalScreen";
 import { NewExportScreen } from "./screens/NewExportScreen";
@@ -35,6 +36,12 @@ export default function PaintBidPage() {
       content: <NewImportScreen />,
     },
     {
+      label: "QA / Reconcile",
+      icon: "🔍",
+      description: "Review & resolve unmapped items",
+      content: <QAScreen />,
+    },
+    {
       label: "Bid Form",
       icon: "💰",
       description: "Set difficulty & pricing",
@@ -64,7 +71,7 @@ export default function PaintBidPage() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Cmd/Ctrl + number for tab switching
-      if ((e.metaKey || e.ctrlKey) && e.key >= "1" && e.key <= "6") {
+      if ((e.metaKey || e.ctrlKey) && e.key >= "1" && e.key <= "7") {
         e.preventDefault();
         const tabIndex = parseInt(e.key) - 1;
         if (tabIndex < tabs.length) {
@@ -185,18 +192,22 @@ export default function PaintBidPage() {
                   />
                   <ShortcutRow
                     keys={["Cmd", "3"]}
-                    description="Go to Bid Form tab"
+                    description="Go to QA / Reconcile tab"
                   />
                   <ShortcutRow
                     keys={["Cmd", "4"]}
-                    description="Go to Proposal tab"
+                    description="Go to Bid Form tab"
                   />
                   <ShortcutRow
                     keys={["Cmd", "5"]}
-                    description="Go to Export tab"
+                    description="Go to Proposal tab"
                   />
                   <ShortcutRow
                     keys={["Cmd", "6"]}
+                    description="Go to Export tab"
+                  />
+                  <ShortcutRow
+                    keys={["Cmd", "7"]}
                     description="Go to Legacy Workflow tab"
                   />
                 </div>

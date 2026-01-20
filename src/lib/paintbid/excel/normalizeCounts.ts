@@ -49,9 +49,9 @@ export interface NormalizedCounts {
 }
 
 /**
- * Known key mappings for suggestions
+ * Known key mappings for matching and suggestions
  */
-const KNOWN_KEYS: Array<{ label: string; target: string; section: string }> = [
+const KNOWN_KEYS: Array<{ label: string; target: keyof NormalizedCounts; section: string }> = [
   // General
   { label: "Units Total", target: "unitsCount", section: "General" },
   { label: "Total SF", target: "totalSF", section: "General" },
@@ -62,6 +62,7 @@ const KNOWN_KEYS: Array<{ label: string; target: string; section: string }> = [
   { label: "Ceiling SF", target: "corridorsCeilingSF", section: "Corridors" },
   { label: "Cor. Ceiling SF", target: "corridorsCeilingSF", section: "Corridors" },
   { label: "Cor. Doors", target: "corridorsDoorCount", section: "Corridors" },
+  { label: "Cor. Door Count", target: "corridorsDoorCount", section: "Corridors" },
   { label: "Doors", target: "corridorsDoorCount", section: "Corridors" },
   { label: "Storage", target: "corridorsStorageCount", section: "Corridors" },
   { label: "Storage Count", target: "corridorsStorageCount", section: "Corridors" },
@@ -87,9 +88,12 @@ const KNOWN_KEYS: Array<{ label: string; target: string; section: string }> = [
   { label: "Parapet LF", target: "parapetLF", section: "Exterior" },
   { label: "Parapet", target: "parapetLF", section: "Exterior" },
   { label: "Window Trim", target: "windowTrimCount", section: "Exterior" },
+  { label: "Window/Door Trim Count", target: "windowTrimCount", section: "Exterior" },
   { label: "Trim Count", target: "windowTrimCount", section: "Exterior" },
   { label: "Wood Verticals", target: "woodVerticalsCount", section: "Exterior" },
+  { label: "Window Wood Verticals Count", target: "woodVerticalsCount", section: "Exterior" },
   { label: "Balc Rail", target: "balconyRailLF", section: "Exterior" },
+  { label: "Balc. Rail LF", target: "balconyRailLF", section: "Exterior" },
   { label: "Balcony Rail", target: "balconyRailLF", section: "Exterior" },
   { label: "Misc", target: "exteriorMiscCount", section: "Exterior" },
   { label: "Stucco SF", target: "stuccoSF", section: "Exterior" },
@@ -98,14 +102,51 @@ const KNOWN_KEYS: Array<{ label: string; target: string; section: string }> = [
   { label: "Garage Wall SF", target: "garageWallSF", section: "Garage" },
   { label: "Wall SF", target: "garageWallSF", section: "Garage" },
   { label: "Trash Room", target: "garageTrashRoomCount", section: "Garage" },
+  { label: "Garage Trash Room Count", target: "garageTrashRoomCount", section: "Garage" },
   { label: "Trash Rooms", target: "garageTrashRoomCount", section: "Garage" },
   { label: "Bike Storage Room", target: "garageBikeStorageCount", section: "Garage" },
+  { label: "Garage Bike Rack Count", target: "garageBikeStorageCount", section: "Garage" },
   { label: "Doors", target: "garageDoorCount", section: "Garage" },
+  { label: "Garage Door Count", target: "garageDoorCount", section: "Garage" },
   { label: "Columns", target: "garageColumnCount", section: "Garage" },
+  { label: "Garage Column Count", target: "garageColumnCount", section: "Garage" },
   // Landscape
   { label: "Gates", target: "gateCount", section: "Landscape" },
   { label: "Gate", target: "gateCount", section: "Landscape" },
 ];
+
+/**
+ * Find matching known key for a given key string
+ */
+function findKnownKey(key: string, section?: string): typeof KNOWN_KEYS[0] | null {
+  // Try exact match first
+  for (const known of KNOWN_KEYS) {
+    if (known.label.toLowerCase() === key.toLowerCase()) {
+      // If section provided, prefer section match
+      if (section && known.section === section) {
+        return known;
+      }
+      // Otherwise return first exact match
+      if (!section) {
+        return known;
+      }
+    }
+  }
+
+  // Try section-aware exact match
+  if (section) {
+    for (const known of KNOWN_KEYS) {
+      if (
+        known.section === section &&
+        known.label.toLowerCase() === key.toLowerCase()
+      ) {
+        return known;
+      }
+    }
+  }
+
+  return null;
+}
 
 /**
  * Normalize counts from File 2 parsed sections
@@ -118,155 +159,59 @@ export function normalizeCounts(
   mapped: ImportReport["mapped"];
   unmapped: ImportReport["unmapped"];
 } {
-  const { sections, rows } = parsed;
+  const { rows } = parsed;
   const normalized: NormalizedCounts = {};
   const mapped: ImportReport["mapped"] = [];
   const unmapped: ImportReport["unmapped"] = [];
 
-  // General section
-  if (sections.General) {
-    normalized.unitsCount = getNumber(sections.General, "Units Total");
-    normalized.totalSF = getNumber(sections.General, "Total SF");
-  }
+  // Process only KV rows (rows with numeric values)
+  const kvRows = rows.filter((row) => row.type === "kv" && row.valueNum !== null && row.valueNum !== undefined);
 
-  // Corridors section
-  if (sections.Corridors) {
-    normalized.corridorsWallSF = getNumber(
-      sections.Corridors,
-      "Cor. Wall SF",
-      "Wall SF"
-    );
-    normalized.corridorsCeilingSF = getNumber(
-      sections.Corridors,
-      "Cor. Lid SF",
-      "Ceiling SF",
-      "Cor. Ceiling SF"
-    );
-    normalized.corridorsDoorCount = getNumber(
-      sections.Corridors,
-      "Cor. Doors",
-      "Doors"
-    );
-    normalized.corridorsStorageCount = getNumber(
-      sections.Corridors,
-      "Storage",
-      "Storage Count"
-    );
-    normalized.corridorsBaseCount = getNumber(sections.Corridors, "Base");
-    normalized.corridorsEntryDoorCount = getNumber(
-      sections.Corridors,
-      "Entry Doors",
-      "Entry Door"
-    );
-  }
+  for (const row of kvRows) {
+    if (!row.key || row.valueNum === null || row.valueNum === undefined) continue;
 
-  // Stairs section
-  if (sections.Stairs) {
-    normalized.stairs1Levels = getNumber(
-      sections.Stairs,
-      "Stair 1 lvls",
-      "Stair 1",
-      "Stairs 1"
-    );
-    normalized.stairs2Levels = getNumber(
-      sections.Stairs,
-      "Stair 2 lvls",
-      "Stair 2",
-      "Stairs 2"
-    );
-  }
+    const knownKey = findKnownKey(row.key, row.sectionGuess);
 
-  // Amenity section
-  if (sections.Amenity) {
-    normalized.amenityRecRoomSF = getNumber(
-      sections.Amenity,
-      "Rec Room",
-      "Rec Room SF"
-    );
-    normalized.amenityLobbySF = getNumber(
-      sections.Amenity,
-      "Lobby",
-      "Lobby SF"
-    );
-  }
+    if (knownKey) {
+      // MAPPED: We know this key
+      normalized[knownKey.target] = row.valueNum;
+      mapped.push({
+        section: row.sectionGuess || knownKey.section,
+        key: row.key,
+        valueNum: row.valueNum,
+        mappedTo: knownKey.target,
+        rowIndex: row.rowIndex,
+      });
+    } else {
+      // UNMAPPED: Unknown key, provide suggestions
+      const suggestions = findSimilar(
+        row.key,
+        KNOWN_KEYS.map((k) => ({ label: k.label, target: k.target })),
+        3,
+        0.2
+      );
 
-  // Exterior section
-  if (sections.Exterior) {
-    normalized.exteriorDoorCount = getNumber(
-      sections.Exterior,
-      "Ext. Door Count",
-      "Door",
-      "Doors"
-    );
-    normalized.parapetLF = getNumber(
-      sections.Exterior,
-      "Parapet LF",
-      "Parapet"
-    );
-    normalized.windowTrimCount = getNumber(
-      sections.Exterior,
-      "Window Trim",
-      "Trim Count"
-    );
-    normalized.woodVerticalsCount = getNumber(
-      sections.Exterior,
-      "Wood Verticals"
-    );
-    normalized.balconyRailLF = getNumber(
-      sections.Exterior,
-      "Balc Rail",
-      "Balcony Rail"
-    );
-    normalized.exteriorMiscCount = getNumber(sections.Exterior, "Misc");
-    normalized.stuccoSF = getNumber(sections.Exterior, "Stucco SF", "Stucco");
-  }
-
-  // Garage section
-  if (sections.Garage) {
-    normalized.garageWallSF = getNumber(
-      sections.Garage,
-      "Garage Wall SF",
-      "Wall SF"
-    );
-    normalized.garageTrashRoomCount = getNumber(
-      sections.Garage,
-      "Trash Room",
-      "Trash Rooms"
-    );
-    normalized.garageBikeStorageCount = getNumber(
-      sections.Garage,
-      "Bike Storage Room"
-    );
-    normalized.garageDoorCount = getNumber(sections.Garage, "Doors");
-    normalized.garageColumnCount = getNumber(sections.Garage, "Columns");
-  }
-
-  // Landscape section
-  if (sections.Landscape) {
-    normalized.gateCount = getNumber(sections.Landscape, "Gates", "Gate");
-  }
-
-  return normalized;
-}
-
-/**
- * Helper to get a numeric value from a section, trying multiple key names
- */
-function getNumber(
-  section: Record<string, number | string>,
-  ...keys: string[]
-): number | undefined {
-  for (const key of keys) {
-    const value = section[key];
-    if (typeof value === "number") {
-      return value;
-    }
-    if (typeof value === "string") {
-      const num = parseFloat(value);
-      if (!isNaN(num)) {
-        return num;
-      }
+      unmapped.push({
+        sectionGuess: row.sectionGuess,
+        key: row.key,
+        valueRaw: row.valueRaw,
+        valueNum: row.valueNum,
+        rowIndex: row.rowIndex,
+        reason: suggestions.length > 0 ? "unrecognized_key" : "ambiguous",
+        suggestions: suggestions.length > 0 ? suggestions : undefined,
+      });
     }
   }
-  return undefined;
+
+  console.log("✅ Normalization complete:", {
+    normalizedKeys: Object.keys(normalized),
+    mappedCount: mapped.length,
+    unmappedCount: unmapped.length,
+  });
+
+  return {
+    counts: normalized,
+    mapped,
+    unmapped,
+  };
 }

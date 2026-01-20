@@ -65,6 +65,17 @@ interface PaintBidStore extends AppState {
   // BidForm actions (new workflow)
   createNewBidForm: () => void;
   importFile2: (parsed: ParsedGroupedCounts, normalized: NormalizedCounts) => void;
+  setImportReport: (report: AppState['importReport']) => void;
+
+  // QA actions
+  updateQAResolution: (updates: Partial<AppState['qa']>) => void;
+  resolveUnmappedItem: (key: string, resolution: AppState['qa']['resolved'][string]) => void;
+
+  // Proposal Finalize actions
+  createProposalSnapshot: (name: string, proposal: unknown, bidTotals: AppState['proposalFinals'][0]['bidTotals']) => void;
+  setActiveFinal: (id: string | undefined) => void;
+  deleteProposalSnapshot: (id: string) => void;
+
   updateBidFormLine: (lineId: string, updates: Partial<BidFormLine>) => void;
   setBidFormLineDifficulty: (lineId: string, difficulty: Difficulty) => void;
   setBidFormLineToggles: (lineId: string, toggles: Partial<BidFormToggles>) => void;
@@ -338,6 +349,96 @@ export const usePaintBidStore = create<PaintBidStore>((set, get) => ({
         parsedFile2: parsed,
         normalizedCounts: normalized,
         bidForm: updatedBidForm,
+      };
+      debouncedSave(newState);
+      return newState;
+    });
+  },
+
+  setImportReport: (report) => {
+    set((state) => {
+      const newState = {
+        ...state,
+        importReport: report,
+        // Reset QA resolution when new import happens
+        qa: {
+          ...state.qa,
+          acknowledgedAt: undefined,
+          resolved: {},
+        },
+      };
+      debouncedSave(newState);
+      return newState;
+    });
+  },
+
+  updateQAResolution: (updates) => {
+    set((state) => {
+      const newState = {
+        ...state,
+        qa: {
+          ...state.qa,
+          ...updates,
+        },
+      };
+      debouncedSave(newState);
+      return newState;
+    });
+  },
+
+  resolveUnmappedItem: (key, resolution) => {
+    set((state) => {
+      const newState = {
+        ...state,
+        qa: {
+          ...state.qa,
+          resolved: {
+            ...state.qa.resolved,
+            [key]: resolution,
+          },
+        },
+      };
+      debouncedSave(newState);
+      return newState;
+    });
+  },
+
+  createProposalSnapshot: (name, proposal, bidTotals) => {
+    set((state) => {
+      const snapshot = {
+        id: crypto.randomUUID(),
+        createdAt: Date.now(),
+        name,
+        proposal,
+        bidTotals,
+      };
+      const newState = {
+        ...state,
+        proposalFinals: [...state.proposalFinals, snapshot],
+        activeFinalId: snapshot.id,
+      };
+      debouncedSave(newState);
+      return newState;
+    });
+  },
+
+  setActiveFinal: (id) => {
+    set((state) => {
+      const newState = {
+        ...state,
+        activeFinalId: id,
+      };
+      debouncedSave(newState);
+      return newState;
+    });
+  },
+
+  deleteProposalSnapshot: (id) => {
+    set((state) => {
+      const newState = {
+        ...state,
+        proposalFinals: state.proposalFinals.filter((s) => s.id !== id),
+        activeFinalId: state.activeFinalId === id ? undefined : state.activeFinalId,
       };
       debouncedSave(newState);
       return newState;

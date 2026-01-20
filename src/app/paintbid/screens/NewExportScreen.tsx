@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { usePaintBidStore } from "@/lib/paintbid/store";
 import { Button } from "@/components/ui/Button";
-import { computeBidFormTotals } from "@/lib/paintbid/bidform/pricing";
+import { computeBidFormTotals, formatCurrency } from "@/lib/paintbid/bidform/pricing";
+import { checkQAGate } from "@/lib/paintbid/qaGating";
 
 /**
  * Export & Backup Screen
@@ -11,8 +12,13 @@ import { computeBidFormTotals } from "@/lib/paintbid/bidform/pricing";
  */
 export function NewExportScreen() {
   const bidForm = usePaintBidStore((state) => state.bidForm);
+  const importReport = usePaintBidStore((state) => state.importReport);
+  const qa = usePaintBidStore((state) => state.qa);
+  const proposalFinals = usePaintBidStore((state) => state.proposalFinals);
+  const deleteProposalSnapshot = usePaintBidStore((state) => state.deleteProposalSnapshot);
   const [exportStatus, setExportStatus] = useState<string>("");
 
+  const qaGate = checkQAGate(importReport, qa);
   const totals = bidForm ? computeBidFormTotals(bidForm, true) : null;
 
   const handleExportJSON = () => {
@@ -76,6 +82,43 @@ export function NewExportScreen() {
     e.target.value = "";
   };
 
+  const handleExportFinalizedProposal = (final: typeof proposalFinals[0]) => {
+    try {
+      const exportData = {
+        version: "2.0-finalized",
+        exportDate: new Date().toISOString(),
+        finalizedProposal: final,
+      };
+
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const dateStr = new Date(final.createdAt).toISOString().split("T")[0];
+      a.download = `paintbid-${final.name.replace(/\s+/g, "-")}-${dateStr}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      setExportStatus("✅ Finalized proposal exported successfully!");
+      setTimeout(() => setExportStatus(""), 3000);
+    } catch (error) {
+      setExportStatus("❌ Export failed");
+      console.error(error);
+    }
+  };
+
+  const handleDeleteFinal = (id: string, name: string) => {
+    if (confirm(`Delete finalized proposal "${name}"? This cannot be undone.`)) {
+      deleteProposalSnapshot(id);
+      setExportStatus(`🗑️ Deleted "${name}"`);
+      setTimeout(() => setExportStatus(""), 3000);
+    }
+  };
+
   const handleClearAllData = () => {
     if (
       confirm(
@@ -91,6 +134,40 @@ export function NewExportScreen() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
+      {/* QA Gate Warning */}
+      {!qaGate.canProceed && (
+        <div className="bg-red-50 border-2 border-red-300 rounded-lg p-6">
+          <div className="flex items-start gap-3">
+            <div className="text-4xl">⛔</div>
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-red-900 mb-2">QA Review Required</h3>
+              <p className="text-red-800 mb-3">
+                {qaGate.reason}
+              </p>
+              <p className="text-sm text-red-700 mb-4">
+                You must acknowledge the QA review before exporting final data.
+                Go to the <strong>QA / Reconcile</strong> tab to review unmapped items.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* QA Warning (gate passed but unresolved items) */}
+      {qaGate.canProceed && qaGate.unresolvedCount > 0 && (
+        <div className="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <div className="text-2xl">⚠️</div>
+            <div>
+              <p className="text-sm font-semibold text-yellow-900">
+                QA acknowledged with {qaGate.unresolvedCount} unresolved item(s).
+                Review the QA tab if you want to resolve them before exporting.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Status Message */}
       {exportStatus && (
         <div
@@ -143,6 +220,51 @@ export function NewExportScreen() {
           <p className="text-yellow-800">
             Create a bid form first to export your data
           </p>
+        </div>
+      )}
+
+      {/* Finalized Proposals */}
+      {proposalFinals.length > 0 && (
+        <div className="bg-white border-2 border-green-300 rounded-lg p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="text-3xl">📋</div>
+            <h3 className="text-xl font-bold text-brand-navy">Finalized Proposals</h3>
+          </div>
+          <p className="text-sm text-gray-600 mb-4">
+            These are frozen snapshots ready for printing or delivery. They cannot be edited.
+          </p>
+          <div className="space-y-3">
+            {proposalFinals.map((final) => (
+              <div
+                key={final.id}
+                className="flex items-center justify-between p-4 bg-green-50 border-2 border-green-200 rounded-lg hover:bg-green-100 transition-colors"
+              >
+                <div className="flex-1">
+                  <div className="font-bold text-brand-navy">{final.name}</div>
+                  <div className="text-sm text-gray-600 mt-1">
+                    Total: <span className="font-bold text-green-700">{formatCurrency(final.bidTotals.total)}</span>
+                    {" • "}
+                    Created: {new Date(final.createdAt).toLocaleString()}
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => handleExportFinalizedProposal(final)}
+                    variant="secondary"
+                    className="text-sm px-4 py-2"
+                  >
+                    📥 Download
+                  </Button>
+                  <button
+                    onClick={() => handleDeleteFinal(final.id, final.name)}
+                    className="px-3 py-2 bg-red-100 text-red-700 rounded-lg font-semibold text-sm hover:bg-red-200 transition-colors"
+                  >
+                    🗑️ Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
