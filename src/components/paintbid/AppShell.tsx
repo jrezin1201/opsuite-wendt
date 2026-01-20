@@ -29,7 +29,7 @@ export function AppShell({ children, lastSaved }: AppShellProps) {
                   PaintBid POC
                 </h1>
                 <p className="text-xs text-white/60">
-                  R.C. Wendt Painting — Local-only estimating prototype
+                  R.C. Wendt Painting, Inc — Local-only estimating prototype
                 </p>
               </div>
             </div>

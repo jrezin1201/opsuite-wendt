@@ -127,7 +127,8 @@ export function NewExportScreen() {
     ) {
       if (confirm("Really delete everything? Consider exporting first!")) {
         localStorage.clear();
-        setExportStatus("🗑️ All data cleared. Refresh page to restart.");
+        // Force page reload to reset app state
+        window.location.reload();
       }
     }
   };

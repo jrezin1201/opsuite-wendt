@@ -80,7 +80,7 @@ export interface SiteConfig {
 export const siteConfig: SiteConfig = {
   // App Metadata
   name: "OpSuite",
-  description: "R.C. Wendt Painting - Local-only estimating tool",
+  description: "R.C. Wendt Painting, Inc - Local-only estimating tool",
   url: "https://opsuite.example.com",
 
   // Feature Flags

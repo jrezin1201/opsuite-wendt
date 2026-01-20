@@ -179,10 +179,10 @@ export function NewImportScreen({ onNavigateToBidForm }: NewImportScreenProps) {
             <div className="flex items-start gap-3">
               <div className="text-3xl">💡</div>
               <div>
-                <p className="font-bold text-blue-900 mb-2 text-base">Import File 2 (Grouped Counts)</p>
+                <p className="font-bold text-blue-900 mb-2 text-base">Expected Excel Format</p>
                 <p className="text-sm text-blue-800">
-                  Upload the Excel file with sections like <strong>General</strong>, <strong>Corridors</strong>, <strong>Exterior</strong>, <strong>Units</strong>, etc.
-                  The sheet should contain key/value counts for each section.
+                  Upload your takeoff Excel file with sections like <strong>General</strong>, <strong>Corridors</strong>, <strong>Exterior</strong>, <strong>Units</strong>, etc.
+                  The sheet should contain key/value counts for each section (e.g., &ldquo;Wall SF: 1500&rdquo;, &ldquo;Doors: 12&rdquo;).
                 </p>
               </div>
             </div>
@@ -234,10 +234,10 @@ export function NewImportScreen({ onNavigateToBidForm }: NewImportScreenProps) {
               >
                 <div className="text-7xl mb-6">📥</div>
                 <div className="text-brand-navy font-bold text-xl mb-2">
-                  Click to upload Excel file
+                  Upload Your Takeoff Excel File
                 </div>
                 <div className="text-base text-gray-600 font-semibold">
-                  File 2 format (.xlsx or .xls)
+                  Excel file with project counts (.xlsx or .xls)
                 </div>
                 <div className="mt-4 px-6 py-3 bg-brand-gold text-brand-navy rounded-lg font-bold hover:bg-brand-gold2 transition-colors">
                   Choose File

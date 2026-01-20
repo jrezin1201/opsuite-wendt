@@ -89,7 +89,7 @@ export function generateProposalFromBidForm(
 
   return {
     header: {
-      companyName: "R.C. Wendt Painting",
+      companyName: "R.C. Wendt Painting, Inc",
       license: "License #12345",
       phone: "(555) 123-4567",
       email: "info@rcwendtpainting.com",

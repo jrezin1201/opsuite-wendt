@@ -53,7 +53,7 @@ export function NewBidFormScreen() {
           No Bid Form Yet
         </h3>
         <p className="text-brand-ink/60 mb-6">
-          Create a new bid form or import counts from File 2 Excel
+          Create a new bid form or import counts from your takeoff Excel file
         </p>
         <Button onClick={createNewBidForm}>
           Create New Bid Form

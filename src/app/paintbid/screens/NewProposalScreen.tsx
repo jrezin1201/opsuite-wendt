@@ -70,7 +70,7 @@ export function NewProposalScreen() {
     // Create sanitized filename from project name
     const projectName = bidForm?.project?.projectName || "Proposal";
     const sanitizedName = projectName.replace(/\s+/g, "_");
-    const newTitle = `${sanitizedName}-RCWendtPainting`;
+    const newTitle = `${sanitizedName}-RCWendtPaintingInc`;
 
     // Set new title (this becomes the print filename)
     document.title = newTitle;
@@ -98,7 +98,7 @@ export function NewProposalScreen() {
         </p>
         <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-6 max-w-lg mx-auto">
           <p className="text-brand-navy font-semibold text-base">
-            📍 Go to the <strong className="text-brand-gold">Import</strong> tab to upload your File 2 Excel and generate a bid form
+            📍 Go to the <strong className="text-brand-gold">Import</strong> tab to upload your takeoff Excel file and generate a bid form
           </p>
         </div>
       </div>
@@ -276,7 +276,7 @@ function ProposalDocument({
             <div>
               <img
                 src="/logo_circle.png"
-                alt="RC Wendt Painting Logo"
+                alt="RC Wendt Painting, Inc Logo"
                 className="w-24 h-24 mb-4 object-contain"
               />
               <h1 className="text-3xl font-bold text-white mb-2">

@@ -23,7 +23,7 @@ export function InstructionsScreen() {
         <StepCard
           number={1}
           title="Import Excel File"
-          description="Upload your File 2 Excel with project counts"
+          description="Upload your takeoff Excel file with project counts"
         >
           <ul className="space-y-2 text-sm text-gray-700 mt-3">
             <li className="flex items-start gap-2">
@@ -32,7 +32,7 @@ export function InstructionsScreen() {
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Click &ldquo;Upload Excel file&rdquo; and select your File 2 (.xlsx or .xls)</span>
+              <span>Click &ldquo;Upload Your Takeoff Excel File&rdquo; and select your counts file (.xlsx or .xls)</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
@@ -468,7 +468,7 @@ export function InstructionsScreen() {
 
       {/* Footer */}
       <div className="text-center py-8 text-gray-500 text-sm border-t border-brand-line">
-        <p>OpSuite - Local-only estimating tool for R.C. Wendt Painting</p>
+        <p>OpSuite - Local-only estimating tool for R.C. Wendt Painting, Inc</p>
         <p className="mt-1">No data leaves your browser. All work is saved locally.</p>
       </div>
     </div>

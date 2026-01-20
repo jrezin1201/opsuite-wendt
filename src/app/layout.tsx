@@ -15,7 +15,7 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OpSuite - R.C. Wendt Painting",
+  title: "OpSuite - R.C. Wendt Painting, Inc",
   description: "Professional painting bid generation and proposal tool",
   icons: {
     icon: [

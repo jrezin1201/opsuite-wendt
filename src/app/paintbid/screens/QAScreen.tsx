@@ -46,7 +46,7 @@ export function QAScreen() {
         </p>
         <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-6 max-w-lg mx-auto">
           <p className="text-brand-navy font-semibold text-base">
-            📍 Next Step: Go to the <strong className="text-brand-gold">Import</strong> tab to upload your File 2 Excel.
+            📍 Next Step: Go to the <strong className="text-brand-gold">Import</strong> tab to upload your takeoff Excel file.
           </p>
         </div>
       </div>
@@ -143,7 +143,7 @@ export function QAScreen() {
 
       {/* Import Report Summary */}
       <div className="bg-gray-50 border-2 border-gray-300 rounded-lg p-6">
-        <h4 className="font-bold text-lg mb-3">Import Summary</h4>
+        <h4 className="font-bold text-lg mb-3">Import Summary (Live)</h4>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
           <div className="bg-white p-3 rounded border border-gray-200">
             <div className="text-xs text-gray-600 mb-1">Parsed Rows</div>
@@ -151,15 +151,22 @@ export function QAScreen() {
           </div>
           <div className="bg-white p-3 rounded border border-gray-200">
             <div className="text-xs text-gray-600 mb-1">Mapped Rows</div>
-            <div className="text-xl font-bold text-green-600">{importReport.summary.mappedRows}</div>
+            <div className="text-xl font-bold text-green-600">
+              {importReport.summary.mappedRows + resolvedCount}
+              {resolvedCount > 0 && (
+                <span className="text-xs text-gray-500 ml-1">(+{resolvedCount})</span>
+              )}
+            </div>
           </div>
           <div className="bg-white p-3 rounded border border-gray-200">
             <div className="text-xs text-gray-600 mb-1">Unmapped Rows</div>
-            <div className="text-xl font-bold text-red-600">{importReport.summary.unmappedRows}</div>
+            <div className="text-xl font-bold text-red-600">{unresolvedCount}</div>
           </div>
           <div className="bg-white p-3 rounded border border-gray-200">
             <div className="text-xs text-gray-600 mb-1">Ignored Rows</div>
-            <div className="text-xl font-bold text-gray-400">{importReport.summary.ignoredRows}</div>
+            <div className="text-xl font-bold text-gray-400">
+              {importReport.summary.ignoredRows + Object.values(qa.resolved).filter(r => r.action === 'ignore').length}
+            </div>
           </div>
         </div>
       </div>
@@ -169,7 +176,7 @@ export function QAScreen() {
         <div className="space-y-4">
           <h4 className="text-lg font-bold text-brand-navy flex items-center gap-2">
             <span className="text-2xl">🔍</span>
-            Unmapped Items ({unmappedItems.length})
+            Unmapped Items ({unresolvedCount} of {unmappedItems.length})
           </h4>
 
           {unmappedItems.map((item) => {

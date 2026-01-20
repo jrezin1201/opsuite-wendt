@@ -20,12 +20,12 @@ export function Sidebar({ activeTab, onTabChange, tabs }: SidebarProps) {
         <div className="flex items-center gap-3 mb-2">
           <img
             src="/logo_circle.png"
-            alt="RC Wendt Painting Logo"
+            alt="RC Wendt Painting, Inc Logo"
             className="w-12 h-12 object-contain"
           />
           <div>
             <h2 className="text-white font-bold text-lg">OpSuite</h2>
-            <p className="text-white/60 text-xs">R.C. Wendt Painting</p>
+            <p className="text-white/60 text-xs">R.C. Wendt Painting, Inc</p>
           </div>
         </div>
       </div>
