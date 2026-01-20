@@ -2,23 +2,29 @@
 
 /**
  * OpSuite Instructions & Help Documentation
+ * Comprehensive guide for the complete bid-to-proposal workflow
  */
 export function InstructionsScreen() {
   return (
     <div className="max-w-5xl mx-auto space-y-8">
       {/* Header */}
-      <div className="bg-gradient-to-br from-brand-navy to-brand-navy2 rounded-xl p-8 text-white">
-        <h1 className="text-3xl font-bold mb-3">OpSuite User Guide</h1>
-        <p className="text-white/80 text-lg">
+      <div className="bg-gradient-to-br from-brand-navy to-brand-navy2 rounded-xl p-8 text-white shadow-lg border-2 border-brand-gold">
+        <h1 className="text-4xl font-bold mb-3">📖 OpSuite User Guide</h1>
+        <p className="text-white/90 text-lg mb-4">
           Complete instructions for creating accurate painting bids with quality assurance and proposal finalization
         </p>
+        <div className="bg-white/10 rounded-lg p-4 border border-white/20">
+          <p className="text-sm text-white/80">
+            <strong className="text-brand-gold">💡 Quick Tip:</strong> Use keyboard shortcuts Cmd+1 through Cmd+7 (or Ctrl on Windows) to quickly navigate between tabs
+          </p>
+        </div>
       </div>
 
-      {/* Quick Start */}
+      {/* Quick Start Workflow */}
       <Section
         icon="🚀"
         title="Quick Start Workflow"
-        description="Follow these 5 steps for a complete bid-to-proposal workflow"
+        description="Follow these steps for a complete bid-to-proposal workflow"
       >
         <StepCard
           number={1}
@@ -28,7 +34,7 @@ export function InstructionsScreen() {
           <ul className="space-y-2 text-sm text-gray-700 mt-3">
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Navigate to the <strong>Import</strong> tab (⌘2)</span>
+              <span>Navigate to the <strong>Import</strong> tab (Cmd+2)</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
@@ -36,15 +42,19 @@ export function InstructionsScreen() {
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Review the <strong>Import Report</strong> showing confidence (High/Medium/Low)</span>
+              <span>The system automatically parses your Excel and shows an <strong>Import Report</strong> with confidence level (High/Medium/Low)</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span><strong>Optional:</strong> Upload a screenshot for OCR validation (cross-check Excel vs takeoff software)</span>
+              <span><strong>Optional:</strong> Upload a screenshot for OCR validation to cross-check Excel vs takeoff software</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Click &ldquo;Generate Bid Form&rdquo; to proceed</span>
+              <span>Review mapped and unmapped items in the summary</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span>Click &ldquo;Generate Bid Form&rdquo; then &ldquo;💰 Go to Bid Form →&rdquo; to proceed</span>
             </li>
           </ul>
         </StepCard>
@@ -57,23 +67,47 @@ export function InstructionsScreen() {
           <ul className="space-y-2 text-sm text-gray-700 mt-3">
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Go to the <strong>QA / Reconcile</strong> tab (⌘3)</span>
+              <span>Go to the <strong>QA / Reconcile</strong> tab (Cmd+3)</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Review any <strong>unmapped items</strong> that could not be automatically matched</span>
+              <span>The tab shows status badge: &ldquo;✅ No Issues&rdquo;, &ldquo;⚠️ Review Required&rdquo; (pulsing), or &ldquo;✓ Acknowledged&rdquo;</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>For each unmapped item, choose: <strong>Map</strong> (link to field), <strong>Ignore</strong> (skip), or <strong>Create Line</strong> (add to bid)</span>
+              <span>The heading shows &ldquo;Unmapped Items (X of Y)&rdquo; where X is unresolved count</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Click &ldquo;Acknowledge QA Review&rdquo; to unlock Proposal and Export tabs</span>
+              <span>For each unmapped item, you have 3 options:</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span className="text-green-600 font-bold">→</span>
+              <span><strong>Map to Existing:</strong> Link the item to an existing bid form line (shows fuzzy match suggestions)</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span className="text-gray-600 font-bold">→</span>
+              <span><strong>Ignore:</strong> Mark as &ldquo;not needed&rdquo; (useful for non-painting items like &ldquo;Plumbing Fixtures&rdquo;)</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span className="text-blue-600 font-bold">→</span>
+              <span><strong>Create New Line:</strong> Add a new line item to the bid form (coming soon)</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span><strong>Note:</strong> If no unmapped items exist, this step is skipped automatically</span>
+              <span>The <strong>Import Summary (Live)</strong> box updates in real-time as you resolve items</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span>Click &ldquo;Undo&rdquo; if you make a mistake</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span>Click &ldquo;✅ Acknowledge & Proceed&rdquo; to unlock Proposal and Export tabs</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span><strong>Note:</strong> If no unmapped items exist (perfect import), this step shows &ldquo;All Clear!&rdquo;</span>
             </li>
           </ul>
         </StepCard>
@@ -81,57 +115,197 @@ export function InstructionsScreen() {
         <StepCard
           number={3}
           title="Adjust Bid Form"
-          description="Set difficulty levels and pricing for each line item"
+          description="Set difficulty levels, toggles, and pricing for each line item"
         >
           <ul className="space-y-2 text-sm text-gray-700 mt-3">
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Go to the <strong>Bid Form</strong> tab (⌘4)</span>
+              <span>Go to the <strong>Bid Form</strong> tab (Cmd+4)</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Set <strong>Difficulty 1-5</strong> for every line (1=Very Easy, 5=Very Hard)</span>
+              <span><strong>Refresh Animation:</strong> When you navigate here after importing new data, you&apos;ll see &ldquo;🔄 Bid Form Updated!&rdquo; banner</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Toggle conditions: 🔒 Tight Access (+10%), 🔧 Heavy Prep (+15%), 🏠 Occupied (+7%)</span>
+              <span>The header shows &ldquo;X line items&rdquo; badge</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Adjust quantities, unit prices, and included items (checkboxes)</span>
+              <span><strong>Global Settings:</strong> Set Contingency %, Overhead %, and Profit % at the top</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Set global Contingency, Overhead, and Profit percentages</span>
+              <span><strong>For each line item:</strong></span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span className="text-green-600 font-bold">✓</span>
+              <span>Check/uncheck the ✓ box to include/exclude from proposal</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span className="text-blue-600 font-bold">#</span>
+              <span>Adjust <strong>Qty</strong> (quantity) if needed</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span className="text-purple-600 font-bold">$</span>
+              <span>Adjust <strong>$/Unit</strong> (base unit price) if needed</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span className="text-orange-600 font-bold">1-5</span>
+              <span><strong>Difficulty:</strong> Click 1-5 buttons (1=Very Easy, 5=Very Hard). Selected shows in gold.</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span className="text-red-600 font-bold">🔧</span>
+              <span><strong>Toggles:</strong> 🔒 Tight Access (+10%), 🔧 Heavy Prep (+15%), 🏠 Occupied (+7%). Active shows in orange.</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span className="text-gray-600 font-bold">×</span>
+              <span>Watch the <strong>Mult</strong> (multiplier) column update automatically (e.g., 1.59x with difficulty 5 + tight access)</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span className="text-brand-gold font-bold">💰</span>
+              <span>The <strong>Total</strong> column shows final line price</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span><strong>Section Totals:</strong> Each section header shows the total for that section</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span><strong>Summary Cards:</strong></span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span className="text-gray-600">→</span>
+              <span><strong>All Items</strong> (white card): Shows all items including excluded ones</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span className="text-brand-navy">→</span>
+              <span><strong>Proposal Total</strong> (navy card with gold text): Shows only included items - this is what goes on the proposal</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span>Both cards show: Base Subtotal, Contingency, Overhead, Profit, and Total</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span><strong>Auto-save:</strong> All changes save automatically every 5 seconds to localStorage</span>
             </li>
           </ul>
         </StepCard>
 
         <StepCard
           number={4}
-          title="Finalize Proposal"
-          description="Review, edit project info, and finalize for printing"
+          title="Generate Proposal"
+          description="Finalize your proposal and prepare for printing"
         >
           <ul className="space-y-2 text-sm text-gray-700 mt-3">
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Navigate to the <strong>Proposal</strong> tab (⌘5)</span>
+              <span>Go to the <strong>Proposal</strong> tab (Cmd+5)</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span><strong>Edit Mode:</strong> Update project details (Name, Location, Client, Contact)</span>
+              <span>The tab shows &ldquo;X finalized versions&rdquo; badge if you have snapshots</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Review scope sections, pricing breakdown, and exclusions</span>
+              <span><strong>Two Modes:</strong></span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span className="text-blue-600 font-bold">✏️</span>
+              <span><strong>Edit Mode:</strong> Shows live draft with editable project info fields (Project Name, Location, Developer/Client, Contact)</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span className="text-green-600 font-bold">📋</span>
+              <span><strong>Preview Mode:</strong> Shows frozen snapshot (read-only)</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Click &ldquo;Finalize for Print&rdquo; to create a <strong>frozen snapshot</strong> (Final v1, v2, etc.)</span>
+              <span><strong>In Edit Mode:</strong></span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Edit project information at the top</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Edit exclusions list at the bottom</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Click &ldquo;✅ Finalize for Print&rdquo; to create a frozen snapshot</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Or click &ldquo;🖨️ Print Draft&rdquo; to print without finalizing</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span><strong>Preview Mode:</strong> View finalized version and print or edit new version</span>
+              <span><strong>In Preview Mode:</strong></span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>View the frozen snapshot (cannot edit)</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Click &ldquo;🖨️ Print Finalized&rdquo; to print</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Click &ldquo;✏️ Edit New Version&rdquo; to return to edit mode and create a new version</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span><strong>Multiple Versions:</strong> If you have multiple finalized versions, a dropdown appears to switch between them</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span><strong>Proposal Contents:</strong></span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Company header with logo (R.C. Wendt Painting, Inc)</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Project Information (name, location, client, contact)</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Scope of Work (organized by sections with gold left borders)</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Pricing breakdown by section</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Total Contract Price (large, bold)</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Add Alternates (if any alternate items exist)</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Exclusions list</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Terms & Conditions</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Signature blocks (Contractor and Client)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span><strong>Print Filename:</strong> Automatically named &ldquo;{'{ProjectName}'}-RCWendtPaintingInc.pdf&rdquo; (spaces replaced with underscores)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span><strong>QA Gating:</strong> If QA has unmapped items and hasn&apos;t been acknowledged, you&apos;ll see a red warning blocking finalization/printing</span>
             </li>
           </ul>
         </StepCard>
@@ -139,255 +313,296 @@ export function InstructionsScreen() {
         <StepCard
           number={5}
           title="Export & Backup"
-          description="Download finalized proposals and full project data"
+          description="Download snapshots, backups, and manage data"
         >
           <ul className="space-y-2 text-sm text-gray-700 mt-3">
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Go to the <strong>Export</strong> tab (⌘6)</span>
+              <span>Go to the <strong>Export</strong> tab (Cmd+6)</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>View all finalized proposals with totals and creation dates</span>
+              <span>The tab shows &ldquo;X snapshots ready&rdquo; badge</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Download individual finalized proposals as JSON</span>
+              <span><strong>Current Bid Summary:</strong> Shows project name, location, total items, and included items</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand-gold font-bold">•</span>
-              <span>Export complete project data (bid form + all snapshots) for backup</span>
+              <span><strong>Finalized Proposals:</strong></span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Lists all finalized proposal snapshots</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Each shows: version name, total price, creation timestamp</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Click &ldquo;📥 Download&rdquo; to save as JSON</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>→</span>
+              <span>Click &ldquo;🗑️ Delete&rdquo; to remove (with confirmation)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span><strong>Export Options:</strong></span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>💾</span>
+              <span><strong>Download Bid as JSON:</strong> Exports complete current bid data (recommended for weekly backups)</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>🖨️</span>
+              <span><strong>Print Proposal:</strong> Instructions to go to Proposal tab</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>📊</span>
+              <span><strong>Export to Excel/CSV:</strong> Coming soon</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span><strong>Import Options:</strong></span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>📁</span>
+              <span><strong>Import Bid from JSON:</strong> Restore a previously saved bid (replaces current bid)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span><strong>Data Management:</strong></span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>💡</span>
+              <span><strong>Automatic Saving:</strong> App auto-saves every 5 seconds to browser localStorage</span>
+            </li>
+            <li className="flex items-start gap-2 ml-6">
+              <span>🗑️</span>
+              <span><strong>Clear All Data:</strong> Removes all bid data, settings, and cached info (requires double confirmation, then reloads page)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-brand-gold font-bold">•</span>
+              <span><strong>Tips Section:</strong> Best practices for backups, PDFs, sharing, and version control</span>
             </li>
           </ul>
         </StepCard>
       </Section>
 
-      {/* Import Report & Confidence */}
+      {/* UI Features */}
       <Section
-        icon="📊"
-        title="Import Report & Confidence Scoring"
-        description="Understanding the quality assessment of your Excel import"
+        icon="🎨"
+        title="User Interface Features"
+        description="Navigate and interact with OpSuite efficiently"
       >
-        <div className="bg-white border-2 border-brand-line rounded-lg p-6">
-          <h4 className="font-bold text-brand-navy text-lg mb-4">Confidence Levels</h4>
-          <div className="space-y-3 mb-6">
-            <ConfidenceCard
-              level="High"
-              color="bg-green-50 border-green-300"
-              icon="✅"
-              criteria="All rows mapped, all required keys present"
-              description="Perfect import - ready to proceed immediately"
-            />
-            <ConfidenceCard
-              level="Medium"
-              color="bg-yellow-50 border-yellow-300"
-              icon="⚠️"
-              criteria="≤5 unmapped rows OR missing 1 required key"
-              description="Minor issues - review recommended but not critical"
-            />
-            <ConfidenceCard
-              level="Low"
-              color="bg-red-50 border-red-300"
-              icon="❌"
-              criteria=">5 unmapped rows OR missing 2+ required keys"
-              description="Significant issues - QA review strongly recommended"
-            />
-          </div>
+        <FeatureCard
+          icon="🎯"
+          title="Global Header"
+          description="Sticky header at the top shows:"
+        >
+          <ul className="space-y-1 text-sm text-gray-700 mt-2">
+            <li>• <strong>Project Name:</strong> Current project or &ldquo;Untitled Project&rdquo;</li>
+            <li>• <strong>Excel File:</strong> Name of uploaded takeoff file with 📄 icon</li>
+            <li>• <strong>Shortcuts Button:</strong> Click ⌨️ or press Cmd+/ to view all keyboard shortcuts</li>
+            <li>• <strong>Saved Timestamp:</strong> Shows last auto-save time</li>
+          </ul>
+        </FeatureCard>
 
-          <h4 className="font-bold text-brand-navy text-lg mb-3">Required Keys</h4>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div className="p-3 bg-gray-50 border border-gray-200 rounded">
-              <div className="font-semibold text-sm text-brand-navy mb-1">Core</div>
-              <ul className="text-xs space-y-1 text-gray-700">
-                <li>• Units Count</li>
-                <li>• Corridors Wall SF</li>
-                <li>• Corridors Ceiling SF</li>
+        <FeatureCard
+          icon="📍"
+          title="Local Tab Headers"
+          description="Each tab has its own header showing:"
+        >
+          <ul className="space-y-1 text-sm text-gray-700 mt-2">
+            <li>• <strong>Tab Icon & Name:</strong> Large icon + tab name</li>
+            <li>• <strong>Description:</strong> Brief description of tab purpose</li>
+            <li>• <strong>Dynamic Status Badges:</strong></li>
+            <li className="ml-6">→ Import: High/Medium/Low confidence badge</li>
+            <li className="ml-6">→ QA: No Issues / Review Required (pulsing) / Acknowledged + unresolved count</li>
+            <li className="ml-6">→ Bid Form: &ldquo;X line items&rdquo;</li>
+            <li className="ml-6">→ Proposal: &ldquo;X finalized versions&rdquo;</li>
+            <li className="ml-6">→ Export: &ldquo;X snapshots ready&rdquo;</li>
+          </ul>
+        </FeatureCard>
+
+        <FeatureCard
+          icon="⌨️"
+          title="Keyboard Shortcuts"
+          description="Navigate faster with keyboard shortcuts (Mac/Windows):"
+        >
+          <div className="grid grid-cols-2 gap-3 mt-2 text-sm">
+            <div>
+              <div className="font-bold text-brand-navy">Navigation</div>
+              <ul className="space-y-1 text-gray-700 mt-1">
+                <li>• Cmd+1 → Instructions</li>
+                <li>• Cmd+2 → Import</li>
+                <li>• Cmd+3 → QA / Reconcile</li>
+                <li>• Cmd+4 → Bid Form</li>
+                <li>• Cmd+5 → Proposal</li>
+                <li>• Cmd+6 → Export</li>
+                <li>• Cmd+7 → Legacy Workflow</li>
               </ul>
             </div>
-            <div className="p-3 bg-gray-50 border border-gray-200 rounded">
-              <div className="font-semibold text-sm text-brand-navy mb-1">Exterior (1 required)</div>
-              <ul className="text-xs space-y-1 text-gray-700">
-                <li>• Exterior Door Count</li>
-                <li>• OR Parapet LF</li>
+            <div>
+              <div className="font-bold text-brand-navy">Other</div>
+              <ul className="space-y-1 text-gray-700 mt-1">
+                <li>• Cmd+/ → Show/hide shortcuts</li>
+                <li>• Cmd+P → Print (on Proposal tab)</li>
+                <li>• Esc → Close modal/dialog</li>
               </ul>
-            </div>
-            <div className="p-3 bg-gray-50 border border-gray-200 rounded">
-              <div className="font-semibold text-sm text-brand-navy mb-1">Stairs (1 required)</div>
-              <ul className="text-xs space-y-1 text-gray-700">
-                <li>• Stairs 1 Levels</li>
-                <li>• OR Stairs 2 Levels</li>
-              </ul>
+              <div className="text-xs text-gray-500 mt-2 italic">
+                * Use Ctrl instead of Cmd on Windows
+              </div>
             </div>
           </div>
-        </div>
+        </FeatureCard>
+
+        <FeatureCard
+          icon="🔄"
+          title="Refresh Animations"
+          description="Visual feedback when data updates:"
+        >
+          <ul className="space-y-1 text-sm text-gray-700 mt-2">
+            <li>• <strong>Bid Form:</strong> When navigating to Bid Form after importing new Excel data, you&apos;ll see an animated banner: &ldquo;🔄 Bid Form Updated! Data refreshed from Excel import&rdquo;</li>
+            <li>• Banner slides down, shows for 1 second, then fades out</li>
+            <li>• Spinning refresh icon provides clear visual feedback</li>
+          </ul>
+        </FeatureCard>
+
+        <FeatureCard
+          icon="💾"
+          title="Auto-Save & Persistence"
+          description="Your work is automatically saved:"
+        >
+          <ul className="space-y-1 text-sm text-gray-700 mt-2">
+            <li>• <strong>Auto-save:</strong> Every 5 seconds to browser localStorage</li>
+            <li>• <strong>Persistence:</strong> Data survives page refresh and browser restart</li>
+            <li>• <strong>Local Only:</strong> All data stays on your device - no cloud, no servers</li>
+            <li>• <strong>Last Saved:</strong> Timestamp shown in global header</li>
+            <li>• <strong>Backup:</strong> Export JSON regularly to prevent data loss (Export tab)</li>
+          </ul>
+        </FeatureCard>
       </Section>
 
-      {/* QA Resolution Actions */}
-      <Section
-        icon="🔍"
-        title="QA Resolution Actions"
-        description="How to handle unmapped items in the QA tab"
-      >
-        <div className="bg-white border-2 border-brand-line rounded-lg p-6">
-          <div className="space-y-3">
-            <QAActionCard
-              icon="📌"
-              action="Map"
-              description="Link this unmapped item to a suggested field (e.g., map 'Corridor Walls' to 'corridorsWallSF')"
-              when="Use when you recognize the item and know where it belongs"
-            />
-            <QAActionCard
-              icon="🚫"
-              action="Ignore"
-              description="Skip this item entirely - it will not create a bid line or affect totals"
-              when="Use for notes, headers, or irrelevant data (e.g., 'Building Name', 'Notes:')"
-            />
-            <QAActionCard
-              icon="➕"
-              action="Create Line"
-              description="Flag this item to manually add as a custom bid line later"
-              when="Use for specialty items not in the standard template (e.g., 'Fire Escape', 'Balconies')"
-            />
-          </div>
-
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-gray-700">
-              <strong className="text-brand-navy">QA Gating:</strong> The Proposal and Export tabs are blocked until you acknowledge the QA review.
-              This prevents accidentally printing a proposal with unreviewed data. Click &ldquo;Acknowledge QA Review&rdquo; to proceed.
-            </p>
-          </div>
-        </div>
-      </Section>
-
-      {/* Difficulty System */}
+      {/* Advanced Features */}
       <Section
         icon="⚙️"
-        title="Difficulty & Pricing System"
-        description="How difficulty levels and toggles affect your bid"
+        title="Advanced Features"
+        description="Power user features and customization options"
       >
-        <div className="bg-white border-2 border-brand-line rounded-lg p-6">
-          <h4 className="font-bold text-brand-navy text-lg mb-4">Difficulty Multipliers (1-5)</h4>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-6">
-            <DifficultyCard level={1} label="Very Easy" multiplier="0.90x" color="bg-green-100 border-green-300 text-green-800" />
-            <DifficultyCard level={2} label="Easy" multiplier="1.00x" color="bg-blue-100 border-blue-300 text-blue-800" />
-            <DifficultyCard level={3} label="Standard" multiplier="1.10x" color="bg-gray-100 border-gray-300 text-gray-800" />
-            <DifficultyCard level={4} label="Hard" multiplier="1.25x" color="bg-orange-100 border-orange-300 text-orange-800" />
-            <DifficultyCard level={5} label="Very Hard" multiplier="1.45x" color="bg-red-100 border-red-300 text-red-800" />
-          </div>
+        <FeatureCard
+          icon="📸"
+          title="OCR Screenshot Validator (Optional)"
+          description="Cross-check Excel data against takeoff software screenshots"
+        >
+          <ul className="space-y-1 text-sm text-gray-700 mt-2">
+            <li>• Available on Import tab after uploading Excel</li>
+            <li>• Upload a screenshot from PlanSwift, Bluebeam, or similar software</li>
+            <li>• Uses OCR (Optical Character Recognition) to extract text from image</li>
+            <li>• Compares screenshot counts vs Excel counts</li>
+            <li>• Shows discrepancies to catch data entry errors</li>
+            <li>• Completely optional - skip if not needed</li>
+          </ul>
+        </FeatureCard>
 
-          <h4 className="font-bold text-brand-navy text-lg mb-4">Condition Toggles</h4>
-          <div className="space-y-3">
-            <ToggleInfo icon="🔒" label="Tight Access" multiplier="+10%" description="Difficult access, narrow spaces, equipment limitations" />
-            <ToggleInfo icon="🔧" label="Heavy Prep" multiplier="+15%" description="Extensive surface preparation, repairs, priming required" />
-            <ToggleInfo icon="🏠" label="Occupied" multiplier="+7%" description="Building occupied during work, requires scheduling coordination" />
-          </div>
-
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-gray-700">
-              <strong className="text-brand-navy">Example:</strong> A line with difficulty <strong>4 (Hard)</strong> = 1.25x base,
-              plus 🔒 Tight Access (+0.10) and 🔧 Heavy Prep (+0.15) = <strong>1.25 × 1.25 = 1.56x final multiplier</strong>
-            </p>
-            <p className="text-xs text-gray-600 mt-2">
-              Maximum combined multiplier is capped at <strong>1.80x</strong> to prevent over-adjustment.
-            </p>
-          </div>
-        </div>
-      </Section>
-
-      {/* Proposal Finalization */}
-      <Section
-        icon="📄"
-        title="Proposal Finalization Workflow"
-        description="Understanding Edit Mode vs Preview Mode"
-      >
-        <div className="bg-white border-2 border-brand-line rounded-lg p-6">
-          <h4 className="font-bold text-brand-navy text-lg mb-4">Two Modes</h4>
-          <div className="space-y-4 mb-6">
-            <div className="border-l-4 border-blue-500 bg-blue-50 p-4">
-              <div className="font-bold text-brand-navy mb-2">📝 Edit Mode (Live Proposal)</div>
-              <ul className="text-sm text-gray-700 space-y-1">
-                <li>• Proposal updates in real-time as you change bid form</li>
-                <li>• Edit project details, exclusions, and settings</li>
-                <li>• &ldquo;Print Draft&rdquo; available (requires QA acknowledged)</li>
-                <li>• &ldquo;Finalize for Print&rdquo; creates a frozen snapshot</li>
+        <FeatureCard
+          icon="🧮"
+          title="Difficulty & Pricing System"
+          description="How the multiplier system works:"
+        >
+          <div className="space-y-2 text-sm text-gray-700 mt-2">
+            <div>
+              <strong>Base Formula:</strong>
+              <code className="block bg-gray-100 p-2 rounded mt-1 font-mono text-xs">
+                Total = Qty × $/Unit × Difficulty Multiplier × Condition Toggles
+              </code>
+            </div>
+            <div>
+              <strong>Difficulty Multipliers:</strong>
+              <ul className="ml-4 mt-1">
+                <li>• 1 (Very Easy): 0.80x</li>
+                <li>• 2 (Easy): 0.90x</li>
+                <li>• 3 (Standard): 1.00x (default)</li>
+                <li>• 4 (Hard): 1.20x</li>
+                <li>• 5 (Very Hard): 1.40x</li>
               </ul>
             </div>
-            <div className="border-l-4 border-green-500 bg-green-50 p-4">
-              <div className="font-bold text-brand-navy mb-2">👁️ Preview Mode (Frozen Snapshot)</div>
-              <ul className="text-sm text-gray-700 space-y-1">
-                <li>• Viewing a finalized version (Final v1, v2, etc.)</li>
-                <li>• Proposal is <strong>read-only</strong> - will not change if bid form changes</li>
-                <li>• &ldquo;Print Finalized&rdquo; available (ready for client)</li>
-                <li>• &ldquo;Edit New Version&rdquo; returns to Edit Mode to create v2, v3, etc.</li>
+            <div>
+              <strong>Condition Toggles (additive):</strong>
+              <ul className="ml-4 mt-1">
+                <li>• 🔒 Tight Access: +10%</li>
+                <li>• 🔧 Heavy Prep: +15%</li>
+                <li>• 🏠 Occupied: +7%</li>
+              </ul>
+            </div>
+            <div>
+              <strong>Example:</strong>
+              <ul className="ml-4 mt-1">
+                <li>Difficulty 5 (1.40x) + Tight Access (+10%) + Heavy Prep (+15%) = 1.65x multiplier</li>
+              </ul>
+            </div>
+            <div>
+              <strong>Then Global Settings Applied:</strong>
+              <ul className="ml-4 mt-1">
+                <li>• Base Subtotal (sum of all included line totals)</li>
+                <li>• + Contingency % (e.g., 10%)</li>
+                <li>• + Overhead % (e.g., 15%)</li>
+                <li>• + Profit % (e.g., 20%)</li>
+                <li>• = Final Total</li>
               </ul>
             </div>
           </div>
+        </FeatureCard>
 
-          <h4 className="font-bold text-brand-navy text-lg mb-3">Why Finalize?</h4>
-          <p className="text-sm text-gray-700 mb-3">
-            Finalization creates a <strong>frozen snapshot</strong> of your proposal with locked totals.
-            This ensures the proposal you print matches exactly what you quoted, even if you later adjust the bid form.
-          </p>
-          <p className="text-sm text-gray-700">
-            You can create multiple versions (v1, v2, v3) for different scenarios or clients without losing previous quotes.
-          </p>
-        </div>
-      </Section>
+        <FeatureCard
+          icon="🎯"
+          title="QA Gating System"
+          description="Prevents accidental proposals with unmapped data"
+        >
+          <ul className="space-y-1 text-sm text-gray-700 mt-2">
+            <li>• If import has unmapped items, QA tab shows &ldquo;⚠️ Review Required&rdquo; (pulsing)</li>
+            <li>• Proposal and Export tabs are blocked until you acknowledge QA</li>
+            <li>• You don&apos;t have to resolve all items - just acknowledge you&apos;ve reviewed them</li>
+            <li>• Click &ldquo;✅ Acknowledge & Proceed&rdquo; to unlock</li>
+            <li>• If you have unresolved items after acknowledging, you&apos;ll see a yellow warning but can still proceed</li>
+            <li>• Prevents sending proposals with missing data</li>
+          </ul>
+        </FeatureCard>
 
-      {/* OCR Validator */}
-      <Section
-        icon="📸"
-        title="Optional: Screenshot OCR Validator"
-        description="Cross-check Excel data against takeoff software screenshots"
-      >
-        <div className="bg-white border-2 border-brand-line rounded-lg p-6">
-          <p className="text-gray-700 mb-4">
-            Upload a screenshot of your takeoff software (e.g., PlanSwift, Bluebeam) to automatically cross-check values against your Excel import.
-          </p>
+        <FeatureCard
+          icon="📦"
+          title="Proposal Snapshots (Version Control)"
+          description="Create frozen versions of proposals"
+        >
+          <ul className="space-y-1 text-sm text-gray-700 mt-2">
+            <li>• <strong>Why:</strong> Preserve exact state at time of finalization (audit trail)</li>
+            <li>• <strong>How:</strong> Click &ldquo;✅ Finalize for Print&rdquo; on Proposal tab</li>
+            <li>• <strong>What&apos;s Saved:</strong> Complete proposal data + totals + timestamp</li>
+            <li>• <strong>Naming:</strong> Auto-named &ldquo;Final v1&rdquo;, &ldquo;Final v2&rdquo;, etc.</li>
+            <li>• <strong>Switching:</strong> Dropdown appears when you have multiple versions</li>
+            <li>• <strong>Exporting:</strong> Download individual snapshots as JSON from Export tab</li>
+            <li>• <strong>Deleting:</strong> Remove unwanted versions from Export tab</li>
+            <li>• <strong>Use Case:</strong> Create v1 for client, client requests changes, create v2 to compare</li>
+          </ul>
+        </FeatureCard>
 
-          <h4 className="font-bold text-brand-navy text-lg mb-3">How It Works</h4>
-          <ol className="space-y-2 text-sm text-gray-700 mb-6">
-            <li className="flex items-start gap-2">
-              <span className="font-bold text-brand-gold">1.</span>
-              <span>After uploading Excel in Import tab, upload a screenshot (PNG, JPG)</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="font-bold text-brand-gold">2.</span>
-              <span>Click &ldquo;Run OCR Validation&rdquo; (takes 10-30 seconds)</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="font-bold text-brand-gold">3.</span>
-              <span>OCR extracts key/value pairs from the screenshot (e.g., &ldquo;Units: 120&rdquo;)</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="font-bold text-brand-gold">4.</span>
-              <span>System compares screenshot values to Excel values and reports diffs</span>
-            </li>
-          </ol>
-
-          <h4 className="font-bold text-brand-navy text-lg mb-3">Diff Types</h4>
-          <div className="space-y-2">
-            <div className="flex items-center gap-3 p-2 bg-blue-50 border border-blue-200 rounded">
-              <span className="font-bold text-blue-700">📸 Screenshot Only</span>
-              <span className="text-sm text-gray-700">Value found in screenshot but not in Excel</span>
-            </div>
-            <div className="flex items-center gap-3 p-2 bg-yellow-50 border border-yellow-200 rounded">
-              <span className="font-bold text-yellow-700">📊 Excel Only</span>
-              <span className="text-sm text-gray-700">Value found in Excel but not in screenshot</span>
-            </div>
-            <div className="flex items-center gap-3 p-2 bg-red-50 border border-red-200 rounded">
-              <span className="font-bold text-red-700">⚠️ Mismatch</span>
-              <span className="text-sm text-gray-700">Value differs between screenshot and Excel (shows % delta)</span>
-            </div>
-          </div>
-
-          <div className="mt-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
-            <p className="text-sm text-gray-700">
-              <strong className="text-brand-navy">Note:</strong> This is an <strong>optional</strong> validation step.
-              OCR is not 100% accurate, so review diffs carefully. Use this as an additional sanity check, not the single source of truth.
-            </p>
-          </div>
-        </div>
+        <FeatureCard
+          icon="🔍"
+          title="Import Confidence Scoring"
+          description="How the system evaluates import quality"
+        >
+          <ul className="space-y-1 text-sm text-gray-700 mt-2">
+            <li>• <strong>High Confidence (✅ Green):</strong> 90%+ of rows mapped successfully</li>
+            <li>• <strong>Medium Confidence (⚠️ Yellow):</strong> 70-89% mapped</li>
+            <li>• <strong>Low Confidence (❌ Red):</strong> Below 70% mapped</li>
+            <li>• Calculation: (Mapped Rows + Ignored Rows) / Total Parsed Rows</li>
+            <li>• Low confidence suggests Excel format issues or unexpected data</li>
+            <li>• You can still proceed with low confidence, but review QA carefully</li>
+          </ul>
+        </FeatureCard>
       </Section>
 
       {/* Tips & Best Practices */}
@@ -398,37 +613,82 @@ export function InstructionsScreen() {
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <TipCard
-            title="Always Review QA Tab"
-            description="Even with high confidence imports, check the QA tab to ensure no critical data was missed"
-          />
+            icon="📊"
+            title="Excel File Format"
+          >
+            <ul className="space-y-1 text-sm text-gray-700">
+              <li>• Organize data by sections (Units, Corridors, Exterior, etc.)</li>
+              <li>• Use consistent key names (e.g., &ldquo;Wall SF&rdquo; not &ldquo;Walls&rdquo;)</li>
+              <li>• Put numeric values in adjacent cells to keys</li>
+              <li>• Avoid merged cells and complex formatting</li>
+              <li>• First sheet or sheet named &ldquo;1 Bldg&rdquo; auto-selected</li>
+            </ul>
+          </TipCard>
+
           <TipCard
-            title="Finalize Before Sending"
-            description="Always finalize proposals before sending to clients - this locks totals and prevents accidental changes"
-          />
+            icon="🎯"
+            title="Efficient Workflow"
+          >
+            <ul className="space-y-1 text-sm text-gray-700">
+              <li>• Use keyboard shortcuts (Cmd+1-7) for fast navigation</li>
+              <li>• Set difficulty 3 (Standard) as baseline, adjust from there</li>
+              <li>• Only toggle conditions when truly needed (don&apos;t over-inflate)</li>
+              <li>• Use the ✓ checkbox to exclude items rather than deleting them</li>
+              <li>• Create multiple proposal versions before picking final</li>
+            </ul>
+          </TipCard>
+
           <TipCard
-            title="Use OCR for Double-Checking"
-            description="Upload a screenshot from your takeoff software to catch transcription errors between systems"
-          />
+            icon="💾"
+            title="Data Safety"
+          >
+            <ul className="space-y-1 text-sm text-gray-700">
+              <li>• Export JSON backup weekly (or after major changes)</li>
+              <li>• Before clicking &ldquo;Clear All Data&rdquo;, export first!</li>
+              <li>• Name JSON exports with dates (e.g., Mexico_Villas-2026-01-20.json)</li>
+              <li>• Keep project JSON files in a safe location (cloud storage, email, etc.)</li>
+              <li>• Remember: Data only exists in your browser - no cloud backup</li>
+            </ul>
+          </TipCard>
+
           <TipCard
-            title="Start with Difficulty 3"
-            description="Set all items to Standard (3) first, then adjust up or down based on site conditions"
-          />
+            icon="🖨️"
+            title="Printing Proposals"
+          >
+            <ul className="space-y-1 text-sm text-gray-700">
+              <li>• Always finalize before printing to clients (creates audit trail)</li>
+              <li>• Print drafts for internal review only</li>
+              <li>• Filename auto-includes project name (easy to organize PDFs)</li>
+              <li>• Use &ldquo;Save as PDF&rdquo; in print dialog for digital delivery</li>
+              <li>• Proposal includes signature blocks for contractor and client</li>
+            </ul>
+          </TipCard>
+
           <TipCard
-            title="Create Multiple Versions"
-            description="Use finalized snapshots to quote different scenarios (e.g., with/without alternates)"
-          />
+            icon="🔄"
+            title="Multiple Projects"
+          >
+            <ul className="space-y-1 text-sm text-gray-700">
+              <li>• Only one project at a time in browser</li>
+              <li>• To switch: Export current project, Clear All Data, Import new project</li>
+              <li>• Or use different browsers for different projects (Chrome vs Safari)</li>
+              <li>• Or use browser profiles (Chrome: Profile 1 for Project A, Profile 2 for Project B)</li>
+              <li>• Consider opening second browser window in Incognito/Private mode</li>
+            </ul>
+          </TipCard>
+
           <TipCard
-            title="Auto-Save Every 5 Seconds"
-            description="OpSuite auto-saves to browser localStorage. Watch the 'Last saved' indicator in the header"
-          />
-          <TipCard
-            title="Export for Backup"
-            description="Regularly export your full project data (Export tab) to save outside the browser"
-          />
-          <TipCard
-            title="Keyboard Shortcuts"
-            description="Press ⌘/ (or Ctrl/) to see all keyboard shortcuts - much faster navigation!"
-          />
+            icon="👥"
+            title="Collaboration"
+          >
+            <ul className="space-y-1 text-sm text-gray-700">
+              <li>• Share JSON files via email or cloud storage</li>
+              <li>• Team member imports JSON to their browser</li>
+              <li>• Each person works independently, then shares updated JSON</li>
+              <li>• For simultaneous work: Assign sections (Person A does pricing, Person B does QA)</li>
+              <li>• No conflicts - each browser is independent</li>
+            </ul>
+          </TipCard>
         </div>
       </Section>
 
@@ -438,30 +698,89 @@ export function InstructionsScreen() {
         title="Troubleshooting"
         description="Common issues and solutions"
       >
-        <div className="space-y-3">
+        <div className="space-y-4">
           <TroubleshootCard
-            issue="Import shows Low confidence"
-            solution="Check the unmapped items list in the Import tab. Go to QA tab to resolve them. Ensure your Excel has sections like 'General', 'Corridors', 'Exterior', etc."
+            problem="Import shows Low Confidence"
+            solutions={[
+              "Check Excel format - should have clear sections with key/value pairs",
+              "Look at 'Unmapped Items' list to see what failed to parse",
+              "Common issue: Unexpected sheet name (select correct sheet in dropdown)",
+              "Common issue: Excel has comments, formulas, or merged cells",
+              "Try simplifying Excel - remove extra formatting, use plain text",
+            ]}
           />
+
           <TroubleshootCard
-            issue="Proposal/Export tabs are blocked"
-            solution="You must acknowledge the QA review first. Go to QA tab and click 'Acknowledge QA Review' (even if no unmapped items exist)."
+            problem="QA tab won't let me proceed"
+            solutions={[
+              "Click '✅ Acknowledge & Proceed' button (even if items unresolved)",
+              "You don't have to resolve all items - just acknowledge review",
+              "If button is disabled, check that import completed successfully",
+              "Refresh page if button appears stuck",
+            ]}
           />
+
           <TroubleshootCard
-            issue="OCR validation shows many diffs"
-            solution="OCR is not perfect - review each diff carefully. Some may be OCR misreads (e.g., '5' read as 'S'). Use diffs as a sanity check, not gospel."
+            problem="Totals seem incorrect"
+            solutions={[
+              "Check Global Settings (Contingency, Overhead, Profit %) are set correctly",
+              "Verify difficulty levels are appropriate (3 is standard, not 1)",
+              "Check which items are included (✓ checkbox) vs excluded",
+              "Remember: 'All Items' card shows everything, 'Proposal Total' shows only included",
+              "Toggles stack (difficulty 5 + tight access + heavy prep = very high multiplier)",
+            ]}
           />
+
           <TroubleshootCard
-            issue="Finalize button disabled"
-            solution="Ensure QA has been acknowledged. If unmapped items exist, you must resolve or acknowledge them first."
+            problem="Lost my data / Page is blank"
+            solutions={[
+              "Check if you accidentally cleared data (Export → Clear All Data)",
+              "Try importing your most recent JSON backup",
+              "Check browser localStorage quota (may be full - clear other sites' data)",
+              "If using Private/Incognito mode, data is lost when window closes",
+              "Ensure you're using the same browser (data doesn't sync across browsers)",
+            ]}
           />
+
           <TroubleshootCard
-            issue="Proposal totals not updating"
-            solution="If in Preview Mode (viewing a finalized snapshot), totals are frozen. Click 'Edit New Version' to return to Edit Mode with live updates."
+            problem="Print filename is wrong"
+            solutions={[
+              "Filename comes from Project Name field (Proposal tab → Edit project info)",
+              "Format is: {'{ProjectName}'}-RCWendtPaintingInc.pdf",
+              "Spaces automatically convert to underscores",
+              "If project name is empty, defaults to 'Proposal-RCWendtPaintingInc.pdf'",
+              "You can rename PDF after downloading",
+            ]}
           />
+
           <TroubleshootCard
-            issue="Lost my work"
-            solution="OpSuite saves to browser localStorage every 5 seconds. Refresh the page - data should reload automatically. Export regularly as backup!"
+            problem="Refresh animation won't stop"
+            solutions={[
+              "Animation auto-dismisses after 1 second - should be quick",
+              "If stuck, refresh browser page (data is saved automatically)",
+              "This is purely visual - doesn't affect functionality",
+            ]}
+          />
+
+          <TroubleshootCard
+            problem="Can't delete finalized proposal"
+            solutions={[
+              "Go to Export tab (not Proposal tab)",
+              "Find the version in 'Finalized Proposals' list",
+              "Click red '🗑️ Delete' button",
+              "Confirm twice in the popup dialogs",
+              "Deletion is permanent - export first if you want to keep a copy",
+            ]}
+          />
+
+          <TroubleshootCard
+            problem="Clear All Data button doesn't work"
+            solutions={[
+              "There are two confirmation dialogs - make sure to confirm both",
+              "After confirming, page automatically reloads (this is expected)",
+              "If page doesn't reload, manually refresh (Cmd+R or F5)",
+              "Check browser console for errors (F12 → Console tab)",
+            ]}
           />
         </div>
       </Section>
@@ -470,6 +789,7 @@ export function InstructionsScreen() {
       <div className="text-center py-8 text-gray-500 text-sm border-t border-brand-line">
         <p>OpSuite - Local-only estimating tool for R.C. Wendt Painting, Inc</p>
         <p className="mt-1">No data leaves your browser. All work is saved locally.</p>
+        <p className="mt-3 text-xs">Version 2.0 • Last Updated: January 2026</p>
       </div>
     </div>
   );
@@ -488,15 +808,15 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-4">
-      <div className="flex items-start gap-3">
-        <div className="text-3xl">{icon}</div>
-        <div>
+    <div className="bg-white rounded-xl border-2 border-brand-line shadow-sm p-8">
+      <div className="flex items-start gap-4 mb-6">
+        <div className="text-5xl">{icon}</div>
+        <div className="flex-1">
           <h2 className="text-2xl font-bold text-brand-navy">{title}</h2>
           <p className="text-gray-600 mt-1">{description}</p>
         </div>
       </div>
-      <div>{children}</div>
+      <div className="space-y-6">{children}</div>
     </div>
   );
 }
@@ -513,14 +833,14 @@ function StepCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white border-2 border-brand-line rounded-lg p-6 mb-4">
-      <div className="flex items-start gap-4 mb-4">
-        <div className="w-12 h-12 bg-brand-gold rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
+    <div className="border-2 border-brand-gold rounded-lg p-6 bg-gradient-to-br from-white to-gray-50 hover:shadow-md transition-shadow">
+      <div className="flex items-start gap-4 mb-3">
+        <div className="flex-shrink-0 w-10 h-10 rounded-full bg-brand-gold text-brand-navy font-bold text-xl flex items-center justify-center shadow-md">
           {number}
         </div>
-        <div>
+        <div className="flex-1">
           <h3 className="text-xl font-bold text-brand-navy">{title}</h3>
-          <p className="text-gray-600 mt-1">{description}</p>
+          <p className="text-gray-600 text-sm mt-1">{description}</p>
         </div>
       </div>
       {children}
@@ -528,127 +848,79 @@ function StepCard({
   );
 }
 
-function ConfidenceCard({
-  level,
-  color,
+function FeatureCard({
   icon,
-  criteria,
+  title,
   description,
+  children,
 }: {
-  level: string;
-  color: string;
   icon: string;
-  criteria: string;
+  title: string;
   description: string;
+  children: React.ReactNode;
 }) {
   return (
-    <div className={`border-2 rounded-lg p-4 ${color}`}>
-      <div className="flex items-start gap-3">
+    <div className="border-2 border-gray-200 rounded-lg p-5 hover:border-brand-gold hover:shadow-md transition-all bg-white">
+      <div className="flex items-start gap-3 mb-3">
         <div className="text-3xl">{icon}</div>
         <div className="flex-1">
-          <div className="font-bold text-lg mb-1">{level} Confidence</div>
-          <div className="text-sm font-semibold mb-1">{criteria}</div>
-          <div className="text-sm">{description}</div>
+          <h4 className="font-bold text-brand-navy text-base">{title}</h4>
+          <p className="text-sm text-gray-600 mt-1">{description}</p>
         </div>
       </div>
+      {children}
     </div>
   );
 }
 
-function QAActionCard({
+function TipCard({
   icon,
-  action,
-  description,
-  when,
+  title,
+  children,
 }: {
   icon: string;
-  action: string;
-  description: string;
-  when: string;
+  title: string;
+  children: React.ReactNode;
 }) {
   return (
-    <div className="border-l-4 border-brand-gold bg-gray-50 p-4">
-      <div className="flex items-start gap-3">
-        <div className="text-2xl">{icon}</div>
-        <div className="flex-1">
-          <div className="font-bold text-brand-navy mb-1">{action}</div>
-          <p className="text-sm text-gray-700 mb-2">{description}</p>
-          <p className="text-xs text-gray-600">
-            <strong>When to use:</strong> {when}
-          </p>
-        </div>
+    <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-4">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-2xl">{icon}</span>
+        <h4 className="font-bold text-blue-900">{title}</h4>
       </div>
-    </div>
-  );
-}
-
-function DifficultyCard({
-  level,
-  label,
-  multiplier,
-  color,
-}: {
-  level: number;
-  label: string;
-  multiplier: string;
-  color: string;
-}) {
-  return (
-    <div className={`border-2 rounded-lg p-3 text-center ${color}`}>
-      <div className="text-2xl font-bold mb-1">{level}</div>
-      <div className="text-xs font-semibold mb-1">{label}</div>
-      <div className="text-sm font-bold">{multiplier}</div>
-    </div>
-  );
-}
-
-function ToggleInfo({
-  icon,
-  label,
-  multiplier,
-  description,
-}: {
-  icon: string;
-  label: string;
-  multiplier: string;
-  description: string;
-}) {
-  return (
-    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-      <div className="text-2xl">{icon}</div>
-      <div className="flex-1">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="font-bold text-brand-navy">{label}</span>
-          <span className="text-sm font-semibold text-orange-600">{multiplier}</span>
-        </div>
-        <p className="text-sm text-gray-600">{description}</p>
-      </div>
-    </div>
-  );
-}
-
-function TipCard({ title, description }: { title: string; description: string }) {
-  return (
-    <div className="bg-white border-2 border-brand-gold/30 rounded-lg p-4">
-      <h4 className="font-bold text-brand-navy mb-2">{title}</h4>
-      <p className="text-sm text-gray-700">{description}</p>
+      {children}
     </div>
   );
 }
 
 function TroubleshootCard({
-  issue,
-  solution,
+  problem,
+  solutions,
 }: {
-  issue: string;
-  solution: string;
+  problem: string;
+  solutions: string[];
 }) {
   return (
-    <div className="bg-white border border-red-200 rounded-lg p-4">
-      <div className="font-bold text-red-700 mb-2">❌ {issue}</div>
-      <p className="text-sm text-gray-700">
-        <strong className="text-green-700">✓ Solution:</strong> {solution}
-      </p>
+    <div className="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-5">
+      <div className="flex items-start gap-3 mb-3">
+        <div className="text-2xl">⚠️</div>
+        <div className="flex-1">
+          <h4 className="font-bold text-yellow-900 text-base mb-2">
+            Problem: {problem}
+          </h4>
+          <div className="text-sm text-yellow-800">
+            <strong>Solutions:</strong>
+            <ul className="mt-2 space-y-1 ml-4">
+              {solutions.map((solution, idx) => (
+                <li key={idx} className="flex items-start gap-2">
+                  <span className="text-brand-gold font-bold">→</span>
+                  <span>{solution}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
