@@ -1,0 +1,493 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+
+  /* Brand Colors */
+  --color-primary: 59 130 246; /* blue-500 */
+  --color-primary-hover: 37 99 235; /* blue-600 */
+  --color-primary-light: 239 246 255; /* blue-50 */
+
+  /* Scenario Colors */
+  --color-scenario-a: 34 197 94; /* green-500 */
+  --color-scenario-a-light: 240 253 244; /* green-50 */
+  --color-scenario-b: 168 85 247; /* purple-500 */
+  --color-scenario-b-light: 250 245 255; /* purple-50 */
+
+  /* Semantic Colors */
+  --color-success: 34 197 94; /* green-500 */
+  --color-danger: 239 68 68; /* red-500 */
+  --color-warning: 251 146 60; /* orange-500 */
+
+  /* Neutral Palette */
+  --color-text-primary: 17 24 39; /* gray-900 */
+  --color-text-secondary: 107 114 128; /* gray-500 */
+  --color-text-tertiary: 156 163 175; /* gray-400 */
+  --color-border: 229 231 235; /* gray-200 */
+  --color-border-light: 243 244 246; /* gray-100 */
+
+  /* Animation Timing Variables */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  @apply bg-gray-50 text-gray-900 antialiased;
+}
+
+/* Smooth transitions for interactive elements */
+/* Avoid applying to all elements as it can interfere with specific transitions */
+button,
+a,
+input,
+textarea,
+select {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, transform;
+  transition-duration: var(--transition-fast);
+  transition-timing-function: var(--ease-out);
+}
+
+/* Accessibility: Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Progressive Disclosure Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes expandCollapse {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 2000px;
+  }
+}
+
+@keyframes slideInTop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-8px);
+  }
+  75% {
+    transform: translateX(8px);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes buttonPress {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes highlightFlash {
+  0% {
+    background-color: rgba(6, 182, 212, 0.3);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.4s ease-out forwards;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.3s ease-out forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+}
+
+.animate-slideInTop {
+  animation: slideInTop 0.3s var(--ease-out) forwards;
+}
+
+.animate-shake {
+  animation: shake 0.4s cubic-bezier(0.36, 0, 0.66, -0.56);
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.animate-buttonPress {
+  animation: buttonPress 0.15s ease;
+}
+
+.animate-highlightFlash {
+  animation: highlightFlash 0.6s ease;
+}
+
+/* Accordion Animation Utilities */
+.accordion-content {
+  overflow: hidden;
+  transition: max-height var(--transition-normal), opacity var(--transition-normal);
+}
+
+.accordion-content-enter {
+  max-height: 0;
+  opacity: 0;
+}
+
+.accordion-content-enter-active {
+  max-height: 2000px;
+  opacity: 1;
+}
+
+.accordion-content-exit {
+  max-height: 2000px;
+  opacity: 1;
+}
+
+.accordion-content-exit-active {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* Print Styles - Epic 9: Export & Sharing */
+@media print {
+  @page {
+    margin: 0.5in;
+    size: auto;
+  }
+
+  * {
+    overflow: visible !important;
+  }
+
+  html, body {
+    background: white !important;
+    color: black !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Hide navigation, sidebars, interactive elements, and input panels */
+  header,
+  nav,
+  aside,
+  footer,
+  button,
+  input[type="file"],
+  textarea,
+  .print\\:hidden,
+  /* Hide PaintBid sidebar and navigation */
+  .paintbid-sidebar,
+  .paintbid-header,
+  [class*="sidebar"],
+  [class*="Sidebar"],
+  /* Hide PaintBid action bar and edit sections */
+  [class*="action-bar"],
+  [class*="edit-exclusions"],
+  /* Hide feedback widget and other floating elements */
+  [class*="FeedbackWidget"],
+  [class*="feedback"],
+  [role="dialog"],
+  [aria-modal="true"] {
+    display: none !important;
+  }
+
+  /* PaintBid specific layout */
+  .paintbid-app {
+    display: block !important;
+    height: auto !important;
+  }
+
+  .paintbid-main {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .paintbid-content {
+    padding: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Show only the deal metrics panel - full width for print */
+  .deal-metrics-panel,
+  [id*="deal-totals"],
+  [class*="DealTotals"] {
+    position: static !important;
+    width: 100% !important;
+    max-width: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Clean backgrounds for printing - preserve some structure */
+  * {
+    box-shadow: none !important;
+  }
+
+  /* Preserve metric card styling for readability */
+  .metric-card,
+  [class*="MetricCard"] {
+    background: #f9fafb !important;
+    border: 1px solid #d1d5db !important;
+    color: #000 !important;
+    page-break-inside: avoid;
+  }
+
+  /* PaintBid print layout fixes */
+  body > div {
+    display: block !important;
+  }
+
+  main,
+  [role="main"],
+  .content-area {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Page breaks */
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .avoid-page-break {
+    page-break-inside: avoid;
+  }
+
+  /* Preserve chart backgrounds */
+  canvas,
+  svg {
+    background: white !important;
+    page-break-inside: avoid;
+  }
+
+  /* Ensure text is readable */
+  h1, h2, h3, h4, h5, h6 {
+    color: #000 !important;
+    font-weight: bold !important;
+    page-break-after: avoid;
+  }
+
+  /* Keep metric values prominent */
+  .metric-value,
+  [class*="text-2xl"],
+  [class*="text-3xl"],
+  [class*="text-4xl"] {
+    color: #000 !important;
+    font-weight: bold !important;
+  }
+
+  /* Deal health badge colors - preserve for context */
+  [class*="bg-green"] {
+    background-color: #d1fae5 !important;
+    color: #065f46 !important;
+  }
+
+  [class*="bg-yellow"] {
+    background-color: #fef3c7 !important;
+    color: #92400e !important;
+  }
+
+  [class*="bg-red"] {
+    background-color: #fee2e2 !important;
+    color: #991b1b !important;
+  }
+
+  /* Page breaks */
+  .page-break {
+    page-break-after: always;
+  }
+
+  /* Prevent breaks inside important elements */
+  tr, td, th,
+  .metric-card,
+  .chart-container,
+  [class*="MetricCard"],
+  [class*="DealHealth"] {
+    page-break-inside: avoid;
+  }
+
+  /* Confetti animation */
+@keyframes confetti {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.animate-confetti {
+  animation: confetti linear forwards;
+}
+
+/* Keep borders visible where needed */
+  table,
+  th,
+  td {
+    border: 1px solid #000 !important;
+  }
+
+  /* Add page header */
+  body::before {
+    content: "Document Summary";
+    display: block;
+    text-align: center;
+    font-size: 10pt;
+    color: #666;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid #ddd;
+  }
+}

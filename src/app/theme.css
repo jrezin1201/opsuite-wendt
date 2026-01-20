@@ -1,0 +1,33 @@
+/* Theme-based background gradients */
+:root {
+  --bg-gradient: linear-gradient(to bottom right, #0f172a, #581c87, #0f172a);
+}
+
+[data-theme="purple"] {
+  --bg-gradient: linear-gradient(to bottom right, #0f172a, #581c87, #0f172a);
+}
+
+[data-theme="blue"] {
+  --bg-gradient: linear-gradient(to bottom right, #0f172a, #1e3a8a, #0f172a);
+}
+
+[data-theme="green"] {
+  --bg-gradient: linear-gradient(to bottom right, #0f172a, #14532d, #0f172a);
+}
+
+[data-theme="orange"] {
+  --bg-gradient: linear-gradient(to bottom right, #0f172a, #7c2d12, #0f172a);
+}
+
+[data-theme="pink"] {
+  --bg-gradient: linear-gradient(to bottom right, #0f172a, #831843, #0f172a);
+}
+
+[data-theme="monochrome"] {
+  --bg-gradient: linear-gradient(to bottom right, #000000, #1f2937, #000000);
+}
+
+/* Apply theme gradient to body */
+.theme-gradient {
+  background: var(--bg-gradient);
+}
