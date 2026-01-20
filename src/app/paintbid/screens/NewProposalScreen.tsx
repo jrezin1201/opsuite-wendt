@@ -63,6 +63,27 @@ export function NewProposalScreen() {
     setMode("edit");
   };
 
+  const handlePrint = () => {
+    // Save original title
+    const originalTitle = document.title;
+
+    // Create sanitized filename from project name
+    const projectName = bidForm?.project?.projectName || "Proposal";
+    const sanitizedName = projectName.replace(/\s+/g, "_");
+    const newTitle = `${sanitizedName}-RCWendtPainting`;
+
+    // Set new title (this becomes the print filename)
+    document.title = newTitle;
+
+    // Print
+    window.print();
+
+    // Restore original title after a short delay
+    setTimeout(() => {
+      document.title = originalTitle;
+    }, 100);
+  };
+
   if (!bidForm || !liveProposal) {
     return (
       <div className="text-center py-20">
@@ -167,7 +188,7 @@ export function NewProposalScreen() {
             {isFinalized ? (
               <>
                 <Button
-                  onClick={() => window.print()}
+                  onClick={handlePrint}
                   className="text-base px-6 py-3"
                 >
                   🖨️ Print Finalized
@@ -183,7 +204,7 @@ export function NewProposalScreen() {
             ) : (
               <>
                 <Button
-                  onClick={() => window.print()}
+                  onClick={handlePrint}
                   variant="secondary"
                   className="text-base px-6 py-3"
                   disabled={!qaGate.canProceed}

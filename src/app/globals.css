@@ -479,15 +479,4 @@ select {
     border: 1px solid #000 !important;
   }
 
-  /* Add page header */
-  body::before {
-    content: "Document Summary";
-    display: block;
-    text-align: center;
-    font-size: 10pt;
-    color: #666;
-    margin-bottom: 1em;
-    padding-bottom: 0.5em;
-    border-bottom: 1px solid #ddd;
-  }
 }

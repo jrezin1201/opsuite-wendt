@@ -18,6 +18,25 @@ export default {
           line: "#E5E7EB",
         },
       },
+      keyframes: {
+        'slide-down': {
+          '0%': { transform: 'translateY(-20px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        'spin-slow': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+        'pulse-once': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.8' },
+        },
+      },
+      animation: {
+        'slide-down': 'slide-down 0.5s ease-out',
+        'spin-slow': 'spin-slow 1s linear infinite',
+        'pulse-once': 'pulse-once 0.5s ease-in-out',
+      },
     },
   },
   plugins: []

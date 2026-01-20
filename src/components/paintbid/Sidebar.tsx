@@ -24,7 +24,7 @@ export function Sidebar({ activeTab, onTabChange, tabs }: SidebarProps) {
             className="w-12 h-12 object-contain"
           />
           <div>
-            <h2 className="text-white font-bold text-lg">PaintBid</h2>
+            <h2 className="text-white font-bold text-lg">OpSuite</h2>
             <p className="text-white/60 text-xs">R.C. Wendt Painting</p>
           </div>
         </div>

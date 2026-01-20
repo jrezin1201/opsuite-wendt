@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { usePaintBidStore } from "@/lib/paintbid/store";
 import { Button } from "@/components/ui/Button";
 import { computeBidFormLine, computeBidFormTotals, formatCurrency, formatPercent } from "@/lib/paintbid/bidform/pricing";
@@ -14,6 +14,26 @@ export function NewBidFormScreen() {
   const setBidFormLineToggles = usePaintBidStore((state) => state.setBidFormLineToggles);
   const setBidFormLineIncluded = usePaintBidStore((state) => state.setBidFormLineIncluded);
   const updateBidFormSettings = usePaintBidStore((state) => state.updateBidFormSettings);
+  const [showRefreshAnimation, setShowRefreshAnimation] = useState(false);
+  const lastBidFormIdRef = useRef<string | undefined>(undefined);
+
+  // Trigger refresh animation on bid form changes
+  useEffect(() => {
+    if (bidForm && bidForm.id !== lastBidFormIdRef.current) {
+      if (lastBidFormIdRef.current !== undefined) {
+        // Only show animation if this isn't the initial load
+        // Defer setState to avoid synchronous updates in effect
+        const showTimer = setTimeout(() => {
+          setShowRefreshAnimation(true);
+          const hideTimer = setTimeout(() => setShowRefreshAnimation(false), 1000);
+          return () => clearTimeout(hideTimer);
+        }, 0);
+        lastBidFormIdRef.current = bidForm.id;
+        return () => clearTimeout(showTimer);
+      }
+      lastBidFormIdRef.current = bidForm.id;
+    }
+  }, [bidForm]); // Track bid form changes
 
   const totals = useMemo(() => {
     if (!bidForm) return null;
@@ -43,7 +63,19 @@ export function NewBidFormScreen() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className={`space-y-6 transition-all duration-500 ${showRefreshAnimation ? 'animate-pulse-once' : ''}`}>
+      {showRefreshAnimation && (
+        <div className="bg-gradient-to-r from-green-100 to-blue-100 border-2 border-green-300 rounded-lg p-4 mb-6 shadow-md animate-slide-down">
+          <div className="flex items-center gap-3">
+            <div className="text-3xl animate-spin-slow">🔄</div>
+            <div>
+              <div className="font-bold text-green-800">Bid Form Updated!</div>
+              <div className="text-sm text-green-700">Data refreshed from Excel import</div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Settings Bar */}
       <div className="bg-white border-2 border-brand-line rounded-lg p-6 shadow-sm">
         <h3 className="text-base font-bold text-brand-navy mb-4">

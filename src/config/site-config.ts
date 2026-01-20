@@ -79,9 +79,9 @@ export interface SiteConfig {
 
 export const siteConfig: SiteConfig = {
   // App Metadata
-  name: "PaintBid",
+  name: "OpSuite",
   description: "R.C. Wendt Painting - Local-only estimating tool",
-  url: "https://paintbid.example.com",
+  url: "https://opsuite.example.com",
 
   // Feature Flags
   // Add/remove features from this array to enable/disable them
@@ -117,13 +117,13 @@ export const siteConfig: SiteConfig = {
 
   // UI Configuration
   theme: "purple",           // Default color scheme
-  isCatalog: false,          // Disabled - PaintBid is the main app now
+  isCatalog: false,          // Disabled - OpSuite is the main app now
   showAdmin: false,          // Toggle admin features on/off
 
   // Social & SEO
   links: {
-    github: "https://github.com/yourusername/paintbid",
-    docs: "https://docs.paintbid.example.com",
+    github: "https://github.com/yourusername/opsuite",
+    docs: "https://docs.opsuite.example.com",
   },
 };
 

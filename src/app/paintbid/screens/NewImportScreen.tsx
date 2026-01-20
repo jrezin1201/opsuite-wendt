@@ -12,7 +12,11 @@ import type { ImportReport } from "@/lib/paintbid/types";
 
 type Step = "upload" | "review" | "complete";
 
-export function NewImportScreen() {
+interface NewImportScreenProps {
+  onNavigateToBidForm?: () => void;
+}
+
+export function NewImportScreen({ onNavigateToBidForm }: NewImportScreenProps) {
   const importFile2 = usePaintBidStore((state) => state.importFile2);
   const setImportReport = usePaintBidStore((state) => state.setImportReport);
   const normalizedCounts = usePaintBidStore((state) => state.normalizedCounts);
@@ -570,10 +574,18 @@ export function NewImportScreen() {
           <p className="text-gray-700 text-lg mb-8 max-w-md mx-auto">
             All quantities have been imported and applied to the bid form.
           </p>
-          <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-6 max-w-lg mx-auto">
-            <p className="text-brand-navy font-semibold text-base">
+          <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-6 max-w-lg mx-auto mb-6">
+            <p className="text-brand-navy font-semibold text-base mb-4">
               📍 Next Step: Go to the <strong className="text-brand-gold">Bid Form</strong> tab to adjust difficulty levels and pricing.
             </p>
+            {onNavigateToBidForm && (
+              <Button
+                onClick={onNavigateToBidForm}
+                className="w-full text-lg py-3"
+              >
+                💰 Go to Bid Form →
+              </Button>
+            )}
           </div>
         </div>
       )}
