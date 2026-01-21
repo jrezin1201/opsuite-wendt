@@ -10,6 +10,7 @@ import { NewProposalScreen } from "./paintbid/screens/NewProposalScreen";
 import { NewExportScreen } from "./paintbid/screens/NewExportScreen";
 import { InstructionsScreen } from "./paintbid/screens/InstructionsScreen";
 import { LegacyWorkflowScreen } from "./paintbid/screens/LegacyWorkflowScreen";
+import { PricingLogicScreen } from "./paintbid/screens/PricingLogicScreen";
 
 export default function OpSuitePage() {
   const initialize = usePaintBidStore((state) => state.initialize);
@@ -153,6 +154,12 @@ export default function OpSuitePage() {
       content: <NewExportScreen />,
     },
     {
+      label: "Pricing Logic",
+      icon: "📊",
+      description: "View all pricing calculations",
+      content: <PricingLogicScreen />,
+    },
+    {
       label: "Legacy Workflow",
       icon: "🕰️",
       description: "Original POC screens",
@@ -164,7 +171,7 @@ export default function OpSuitePage() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Cmd/Ctrl + number for tab switching
-      if ((e.metaKey || e.ctrlKey) && e.key >= "1" && e.key <= "7") {
+      if ((e.metaKey || e.ctrlKey) && e.key >= "1" && e.key <= "8") {
         e.preventDefault();
         const tabIndex = parseInt(e.key) - 1;
         if (tabIndex < tabs.length) {
@@ -333,6 +340,10 @@ export default function OpSuitePage() {
                   />
                   <ShortcutRow
                     keys={["Cmd", "7"]}
+                    description="Go to Pricing Logic tab"
+                  />
+                  <ShortcutRow
+                    keys={["Cmd", "8"]}
                     description="Go to Legacy Workflow tab"
                   />
                 </div>

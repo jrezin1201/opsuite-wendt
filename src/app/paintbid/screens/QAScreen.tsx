@@ -12,6 +12,7 @@ export function QAScreen() {
   const store = usePaintBidStore();
 
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
+  const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
 
   // Check if QA has been acknowledged
   const isAcknowledged = qa.acknowledgedAt !== undefined;
@@ -20,6 +21,12 @@ export function QAScreen() {
   const unmappedItems = importReport?.unmapped || [];
   const resolvedCount = Object.keys(qa.resolved).length;
   const unresolvedCount = unmappedItems.length - resolvedCount;
+
+  // Get list of unresolved items
+  const unresolvedItems = unmappedItems.filter((item) => {
+    const itemKey = `${item.sectionGuess || "unknown"}-${item.key}-${item.rowIndex}`;
+    return qa.resolved[itemKey] === undefined;
+  });
 
   const handleAcknowledge = () => {
     store.updateQAResolution({
@@ -33,6 +40,53 @@ export function QAScreen() {
       mappedTo,
       note,
     });
+  };
+
+  const handleToggleItem = (key: string) => {
+    const newSelected = new Set(selectedItems);
+    if (newSelected.has(key)) {
+      newSelected.delete(key);
+    } else {
+      newSelected.add(key);
+    }
+    setSelectedItems(newSelected);
+  };
+
+  const handleToggleAll = () => {
+    if (selectedItems.size === unresolvedItems.length) {
+      setSelectedItems(new Set());
+    } else {
+      setSelectedItems(new Set(unresolvedItems.map(item =>
+        `${item.sectionGuess || "unknown"}-${item.key}-${item.rowIndex}`
+      )));
+    }
+  };
+
+  const handleBatchResolve = (action: ResolutionAction) => {
+    selectedItems.forEach((itemKey) => {
+      const item = unmappedItems.find(
+        (i) => `${i.sectionGuess || "unknown"}-${i.key}-${i.rowIndex}` === itemKey
+      );
+      if (!item) return;
+
+      let mappedTo: string | undefined;
+      let note: string | undefined;
+
+      if (action === "map") {
+        mappedTo = item.suggestions?.[0]?.target || "unknown";
+        note = `Bulk mapped to ${mappedTo}`;
+      } else if (action === "ignore") {
+        note = "Bulk ignored - not needed";
+      } else if (action === "create_line") {
+        mappedTo = item.key;
+        note = "Bulk created as custom line item";
+      }
+
+      handleResolve(itemKey, action, mappedTo, note);
+    });
+
+    setSelectedItems(new Set());
+    setExpandedKey(null);
   };
 
   // No import report yet
@@ -174,10 +228,63 @@ export function QAScreen() {
       {/* Unmapped Items List */}
       {unmappedItems.length > 0 && (
         <div className="space-y-4">
-          <h4 className="text-lg font-bold text-brand-navy flex items-center gap-2">
-            <span className="text-2xl">🔍</span>
-            Unmapped Items ({unresolvedCount} of {unmappedItems.length})
-          </h4>
+          <div className="flex items-center justify-between">
+            <h4 className="text-lg font-bold text-brand-navy flex items-center gap-2">
+              <span className="text-2xl">🔍</span>
+              Unmapped Items ({unresolvedCount} of {unmappedItems.length})
+            </h4>
+            {unresolvedCount > 0 && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold text-gray-600">
+                  {selectedItems.size} selected
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Batch Actions Bar */}
+          {unresolvedCount > 0 && (
+            <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-4">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={selectedItems.size === unresolvedItems.length && unresolvedItems.length > 0}
+                    onChange={handleToggleAll}
+                    className="w-5 h-5 rounded border-2 border-blue-400 text-brand-navy focus:ring-2 focus:ring-brand-gold"
+                  />
+                  <span className="font-semibold text-blue-900">
+                    Select All ({unresolvedItems.length} items)
+                  </span>
+                </div>
+                {selectedItems.size > 0 && (
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => handleBatchResolve("map")}
+                      variant="secondary"
+                      className="text-sm px-4 py-2"
+                    >
+                      📌 Map Selected ({selectedItems.size})
+                    </Button>
+                    <Button
+                      onClick={() => handleBatchResolve("ignore")}
+                      variant="secondary"
+                      className="text-sm px-4 py-2"
+                    >
+                      🚫 Ignore Selected ({selectedItems.size})
+                    </Button>
+                    <Button
+                      onClick={() => handleBatchResolve("create_line")}
+                      variant="secondary"
+                      className="text-sm px-4 py-2"
+                    >
+                      ➕ Create Lines ({selectedItems.size})
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {unmappedItems.map((item) => {
             const itemKey = `${item.sectionGuess || "unknown"}-${item.key}-${item.rowIndex}`;
@@ -197,6 +304,14 @@ export function QAScreen() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-start gap-3 mb-2">
+                      {!isResolved && (
+                        <input
+                          type="checkbox"
+                          checked={selectedItems.has(itemKey)}
+                          onChange={() => handleToggleItem(itemKey)}
+                          className="w-5 h-5 mt-1 rounded border-2 border-yellow-400 text-brand-navy focus:ring-2 focus:ring-brand-gold"
+                        />
+                      )}
                       <div className="text-2xl">
                         {isResolved ? "✅" : "❓"}
                       </div>

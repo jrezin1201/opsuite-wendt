@@ -1,0 +1,116 @@
+/* Print Styles for Professional Proposals */
+
+@media print {
+  /* Reset page margins for print */
+  @page {
+    size: letter;
+    margin: 0.5in;
+  }
+
+  /* Page break controls */
+  .page-break {
+    page-break-after: always;
+    break-after: always;
+  }
+
+  /* Hide non-printable elements */
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* Show print-only elements */
+  .print\:block {
+    display: block !important;
+  }
+
+  /* Remove shadows and borders for cleaner print */
+  .print\:shadow-none {
+    box-shadow: none !important;
+  }
+
+  .print\:border-0 {
+    border-width: 0 !important;
+  }
+
+  /* Ensure tables don't break across pages */
+  table {
+    page-break-inside: avoid;
+  }
+
+  /* Professional proposal specific */
+  .professional-proposal-page {
+    page-break-after: always;
+    min-height: 10in;
+  }
+
+  /* Hide all watermarks during print */
+  .watermark {
+    display: none !important;
+  }
+
+  /* Force black text for better print quality */
+  .print\:text-gray-900 {
+    color: #111827 !important;
+  }
+
+  .print\:text-gray-800 {
+    color: #1f2937 !important;
+  }
+
+  .print\:border-gray-900 {
+    border-color: #111827 !important;
+  }
+
+  .print\:border-gray-300 {
+    border-color: #d1d5db !important;
+  }
+
+  /* Ensure backgrounds print */
+  .bg-yellow-300 {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .bg-yellow-50 {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Table formatting for print */
+  table.proposal-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  table.proposal-table td,
+  table.proposal-table th {
+    padding: 8px;
+    border: 1px solid #000;
+  }
+
+  /* Ensure red text prints correctly */
+  .text-red-600 {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    print-color-adjust: exact;
+    color: #dc2626 !important;
+  }
+
+  /* No page numbers - removed per request */
+}
+
+/* Non-print styles for proposal preview */
+@media screen {
+  .professional-proposal-container {
+    background: #f3f4f6;
+    padding: 2rem;
+  }
+
+  .professional-proposal-page {
+    background: white;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+  }
+}

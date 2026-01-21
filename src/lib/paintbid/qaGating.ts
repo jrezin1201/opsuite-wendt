@@ -16,8 +16,9 @@ export interface QAGateStatus {
  * Check if QA gate is passed
  * User can proceed if:
  * 1. No import report exists (legacy workflow)
- * 2. No unmapped items
- * 3. QA has been acknowledged (even if items not fully resolved)
+ * 2. No unmapped items initially
+ * 3. All unmapped items have been resolved
+ * 4. QA has been acknowledged (even if items not fully resolved)
  */
 export function checkQAGate(
   importReport?: AppState["importReport"],
@@ -44,6 +45,16 @@ export function checkQAGate(
     return {
       canProceed: true,
       hasUnmappedItems: false,
+      isAcknowledged,
+      unresolvedCount: 0,
+    };
+  }
+
+  // All items resolved = allow proceed (even if not explicitly acknowledged)
+  if (unresolvedCount === 0) {
+    return {
+      canProceed: true,
+      hasUnmappedItems: true,
       isAcknowledged,
       unresolvedCount: 0,
     };

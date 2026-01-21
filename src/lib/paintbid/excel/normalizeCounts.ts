@@ -46,6 +46,13 @@ export interface NormalizedCounts {
 
   // Landscape
   gateCount?: number;
+
+  // New fields from detailed takeoff
+  fenceLF?: number;
+  cmuWallLF?: number;
+  cmuWallSF?: number;
+  stuccoAccentCount?: number;
+  stairwellRails?: number;
 }
 
 /**

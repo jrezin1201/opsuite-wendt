@@ -1,6 +1,7 @@
 import React from "react";
 import "./globals.css";
 import "./theme.css";
+import "../styles/print.css";
 import type { Metadata, Viewport } from "next";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import { ErrorBoundary } from "@/components/ErrorBoundary";

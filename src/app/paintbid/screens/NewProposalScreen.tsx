@@ -6,8 +6,11 @@ import { generateProposalFromBidForm } from "@/lib/paintbid/proposal/fromBidForm
 import { formatCurrency, computeBidFormTotals } from "@/lib/paintbid/bidform/pricing";
 import { Button } from "@/components/ui/Button";
 import { checkQAGate } from "@/lib/paintbid/qaGating";
+import { convertToProfessionalProposal } from "@/lib/paintbid/proposal/toProfessional";
+import { ProfessionalProposalView } from "@/components/paintbid/ProfessionalProposal";
 
 type ViewMode = "edit" | "preview";
+type ProposalFormat = "standard" | "professional";
 
 export function NewProposalScreen() {
   const bidForm = usePaintBidStore((state) => state.bidForm);
@@ -21,6 +24,7 @@ export function NewProposalScreen() {
   const setActiveFinal = usePaintBidStore((state) => state.setActiveFinal);
 
   const [mode, setMode] = useState<ViewMode>("edit");
+  const [format, setFormat] = useState<ProposalFormat>("professional");
 
   const qaGate = checkQAGate(importReport, qa);
 
@@ -28,6 +32,12 @@ export function NewProposalScreen() {
   const liveProposal = useMemo(() => {
     if (!bidForm) return null;
     return generateProposalFromBidForm(bidForm);
+  }, [bidForm]);
+
+  // Generate professional proposal from current bidForm
+  const professionalProposal = useMemo(() => {
+    if (!bidForm) return null;
+    return convertToProfessionalProposal(bidForm);
   }, [bidForm]);
 
   // Get active finalized snapshot
@@ -149,12 +159,12 @@ export function NewProposalScreen() {
           <div className="flex items-center gap-4">
             <div>
               <h3 className="text-lg font-bold text-brand-navy">
-                {isFinalized ? "📋 Finalized Proposal" : "✏️ Draft Proposal"}
+                {isFinalized ? "📋 Saved Snapshot" : "✏️ Live Proposal"}
               </h3>
               <p className="text-sm text-gray-600">
                 {isFinalized
-                  ? `Viewing: ${activeFinal?.name} (created ${new Date(activeFinal?.createdAt || 0).toLocaleString()})`
-                  : "Editing live proposal - changes apply in real-time"}
+                  ? `Viewing saved version: ${activeFinal?.name} (created ${new Date(activeFinal?.createdAt || 0).toLocaleString()})`
+                  : "Editing live proposal - changes sync with bid form automatically"}
               </p>
             </div>
             {proposalFinals.length > 0 && (
@@ -182,43 +192,58 @@ export function NewProposalScreen() {
                 </button>
               </div>
             )}
+            {/* Format Toggle */}
+            <div className="flex gap-2 ml-6 border-l-2 border-gray-300 pl-6">
+              <button
+                onClick={() => setFormat("standard")}
+                className={`px-3 py-1.5 rounded font-semibold text-sm transition-colors ${
+                  format === "standard"
+                    ? "bg-brand-gold text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                Standard Format
+              </button>
+              <button
+                onClick={() => setFormat("professional")}
+                className={`px-3 py-1.5 rounded font-semibold text-sm transition-colors ${
+                  format === "professional"
+                    ? "bg-brand-gold text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                Professional Format
+              </button>
+            </div>
           </div>
 
           <div className="flex gap-3">
+            {/* Always show Print button */}
+            <Button
+              onClick={handlePrint}
+              className="text-base px-6 py-3"
+              disabled={!qaGate.canProceed}
+            >
+              🖨️ Print Proposal
+            </Button>
+
             {isFinalized ? (
-              <>
-                <Button
-                  onClick={handlePrint}
-                  className="text-base px-6 py-3"
-                >
-                  🖨️ Print Finalized
-                </Button>
-                <Button
-                  onClick={handleEditNewVersion}
-                  variant="secondary"
-                  className="text-base px-6 py-3"
-                >
-                  ✏️ Edit New Version
-                </Button>
-              </>
+              <Button
+                onClick={handleEditNewVersion}
+                variant="secondary"
+                className="text-base px-6 py-3"
+              >
+                ✏️ Edit New Version
+              </Button>
             ) : (
-              <>
-                <Button
-                  onClick={handlePrint}
-                  variant="secondary"
-                  className="text-base px-6 py-3"
-                  disabled={!qaGate.canProceed}
-                >
-                  🖨️ Print Draft
-                </Button>
-                <Button
-                  onClick={handleFinalize}
-                  className="text-base px-6 py-3"
-                  disabled={!qaGate.canProceed}
-                >
-                  ✅ Finalize for Print
-                </Button>
-              </>
+              <Button
+                onClick={handleFinalize}
+                variant="secondary"
+                className="text-base px-6 py-3"
+                disabled={!qaGate.canProceed}
+              >
+                💾 Save Snapshot
+              </Button>
             )}
           </div>
         </div>
@@ -246,12 +271,24 @@ export function NewProposalScreen() {
       )}
 
       {/* Proposal Preview */}
-      <ProposalDocument
-        proposal={proposal}
-        isFinalized={isFinalized}
-        updateBidFormProject={updateBidFormProject}
-        updateBidFormExclusions={updateBidFormExclusions}
-      />
+      {format === "professional" && professionalProposal ? (
+        <div className="space-y-8">
+          <ProfessionalProposalView proposal={professionalProposal} pageNumber={1} />
+          <div className="page-break print:block hidden"></div>
+          <ProfessionalProposalView proposal={professionalProposal} pageNumber={2} />
+          <div className="page-break print:block hidden"></div>
+          <ProfessionalProposalView proposal={professionalProposal} pageNumber={3} />
+          <div className="page-break print:block hidden"></div>
+          <ProfessionalProposalView proposal={professionalProposal} pageNumber={4} />
+        </div>
+      ) : (
+        <ProposalDocument
+          proposal={proposal}
+          isFinalized={isFinalized}
+          updateBidFormProject={updateBidFormProject}
+          updateBidFormExclusions={updateBidFormExclusions}
+        />
+      )}
     </div>
   );
 }
